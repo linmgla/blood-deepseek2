@@ -281,6 +281,14 @@
             transform: translateY(0);
         }
         
+        .filter-btn.hidden {
+            opacity: 0.4;
+        }
+        
+        .filter-btn.hidden:hover {
+            opacity: 0.7;
+        }
+        
         .calendar-container {
             background: white;
             border-radius: 10px;
@@ -426,6 +434,14 @@
             box-shadow: 0 3px 8px rgba(0,0,0,0.3);
         }
         
+        .event.hidden {
+            opacity: 0.3;
+            text-decoration: line-through;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+        
         .event-time {
             font-weight: 600;
             font-size: 11px;
@@ -442,9 +458,14 @@
             font-size: 12px;
         }
         
-        .dark-theme .event .event-time,
-        .dark-theme .event .event-title {
+        .dark-theme .event:not(.hidden) .event-time,
+        .dark-theme .event:not(.hidden) .event-title {
             color: white;
+        }
+        
+        .dark-theme .event.hidden .event-time,
+        .dark-theme .event.hidden .event-title {
+            color: #777;
         }
         
         .empty-cell {
@@ -1054,7 +1075,7 @@
         // 全局變量
         let eventData = [];
         
-        // 地點顏色配置
+        // 地點顏色配置 - 保持原始設定
         const locationConfig = {
             "101鐘樓": {
                 color: "#4dabf7",
@@ -1495,7 +1516,7 @@
             modal.classList.add('active');
         }
         
-        // 生成篩選按鈕
+        // 生成篩選按鈕 - 恢復原始顏色設定
         function generateFilterButtons() {
             const filtersContainer = document.getElementById('filters');
             
@@ -1509,31 +1530,17 @@
                 const isDarkTheme = document.body.classList.contains('dark-theme');
                 
                 const button = document.createElement('button');
-                button.className = 'filter-btn';
+                button.className = `filter-btn ${isHidden ? 'hidden' : ''}`;
                 button.textContent = location;
                 
-                if (isHidden) {
-                    // 隱藏狀態的按鈕
-                    if (isDarkTheme) {
-                        button.style.backgroundColor = '#333';
-                        button.style.color = '#777';
-                        button.style.border = '2px solid #555';
-                    } else {
-                        button.style.backgroundColor = '#f8f9fa';
-                        button.style.color = '#adb5bd';
-                        button.style.border = '2px solid #dee2e6';
-                    }
+                if (isDarkTheme) {
+                    button.style.backgroundColor = isHidden ? '#333' : config.bgColor.replace('ff', '33');
+                    button.style.color = isHidden ? '#777' : config.color;
+                    button.style.border = `2px solid ${isHidden ? '#555' : config.borderColor}`;
                 } else {
-                    // 顯示狀態的按鈕
-                    if (isDarkTheme) {
-                        button.style.backgroundColor = config.bgColor.replace('ff', '33');
-                        button.style.color = config.color;
-                        button.style.border = `2px solid ${config.borderColor}`;
-                    } else {
-                        button.style.backgroundColor = config.bgColor;
-                        button.style.color = config.color;
-                        button.style.border = `2px solid ${config.borderColor}`;
-                    }
+                    button.style.backgroundColor = isHidden ? config.hiddenColor : config.bgColor;
+                    button.style.color = isHidden ? '#adb5bd' : config.color;
+                    button.style.border = `2px solid ${isHidden ? config.hiddenBorder : config.borderColor}`;
                 }
                 
                 button.addEventListener('click', () => toggleLocation(location));
@@ -1593,7 +1600,7 @@
             }
         }
         
-        // 生成日曆 - 已修改為完全隱藏被篩選掉的活動
+        // 生成日曆 - 修改為完全隱藏被篩選掉的活動
         function generateCalendar() {
             const calendarGrid = document.getElementById('calendarGrid');
             const noEventsMessage = document.getElementById('noEvents');
