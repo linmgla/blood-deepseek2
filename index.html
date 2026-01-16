@@ -281,14 +281,6 @@
             transform: translateY(0);
         }
         
-        .filter-btn.hidden {
-            opacity: 0.4;
-        }
-        
-        .filter-btn.hidden:hover {
-            opacity: 0.7;
-        }
-        
         .calendar-container {
             background: white;
             border-radius: 10px;
@@ -434,14 +426,6 @@
             box-shadow: 0 3px 8px rgba(0,0,0,0.3);
         }
         
-        .event.hidden {
-            opacity: 0.3;
-            text-decoration: line-through;
-            cursor: not-allowed;
-            transform: none !important;
-            box-shadow: none !important;
-        }
-        
         .event-time {
             font-weight: 600;
             font-size: 11px;
@@ -458,14 +442,9 @@
             font-size: 12px;
         }
         
-        .dark-theme .event:not(.hidden) .event-time,
-        .dark-theme .event:not(.hidden) .event-title {
+        .dark-theme .event .event-time,
+        .dark-theme .event .event-title {
             color: white;
-        }
-        
-        .dark-theme .event.hidden .event-time,
-        .dark-theme .event.hidden .event-title {
-            color: #777;
         }
         
         .empty-cell {
@@ -1530,17 +1509,31 @@
                 const isDarkTheme = document.body.classList.contains('dark-theme');
                 
                 const button = document.createElement('button');
-                button.className = `filter-btn ${isHidden ? 'hidden' : ''}`;
+                button.className = 'filter-btn';
                 button.textContent = location;
                 
-                if (isDarkTheme) {
-                    button.style.backgroundColor = isHidden ? '#333' : config.bgColor.replace('ff', '33');
-                    button.style.color = config.color;
-                    button.style.border = `2px solid ${config.borderColor}`;
+                if (isHidden) {
+                    // 隱藏狀態的按鈕
+                    if (isDarkTheme) {
+                        button.style.backgroundColor = '#333';
+                        button.style.color = '#777';
+                        button.style.border = '2px solid #555';
+                    } else {
+                        button.style.backgroundColor = '#f8f9fa';
+                        button.style.color = '#adb5bd';
+                        button.style.border = '2px solid #dee2e6';
+                    }
                 } else {
-                    button.style.backgroundColor = isHidden ? config.hiddenColor : config.bgColor;
-                    button.style.color = isHidden ? '#adb5bd' : config.color;
-                    button.style.border = `2px solid ${isHidden ? config.hiddenBorder : config.borderColor}`;
+                    // 顯示狀態的按鈕
+                    if (isDarkTheme) {
+                        button.style.backgroundColor = config.bgColor.replace('ff', '33');
+                        button.style.color = config.color;
+                        button.style.border = `2px solid ${config.borderColor}`;
+                    } else {
+                        button.style.backgroundColor = config.bgColor;
+                        button.style.color = config.color;
+                        button.style.border = `2px solid ${config.borderColor}`;
+                    }
                 }
                 
                 button.addEventListener('click', () => toggleLocation(location));
@@ -1600,7 +1593,7 @@
             }
         }
         
-        // 生成日曆
+        // 生成日曆 - 已修改為完全隱藏被篩選掉的活動
         function generateCalendar() {
             const calendarGrid = document.getElementById('calendarGrid');
             const noEventsMessage = document.getElementById('noEvents');
@@ -1651,29 +1644,28 @@
                 dayCell.appendChild(dayNumber);
                 
                 const dayEvents = getEventsForDate(day.fullDate);
+                // 篩選出未隱藏的事件
+                const visibleDayEvents = dayEvents.filter(event => !hiddenLocations.has(event.location));
                 let hasVisibleDayEvents = false;
                 
-                if (dayEvents.length > 0) {
-                    dayEvents.forEach(event => {
-                        const isHidden = hiddenLocations.has(event.location);
-                        
-                        if (!isHidden) {
-                            hasVisibleEvents = true;
-                            hasVisibleDayEvents = true;
-                        }
+                // 只顯示未隱藏的事件
+                if (visibleDayEvents.length > 0) {
+                    visibleDayEvents.forEach(event => {
+                        hasVisibleEvents = true;
+                        hasVisibleDayEvents = true;
                         
                         const eventDiv = document.createElement('div');
-                        eventDiv.className = `event ${isHidden ? 'hidden' : ''}`;
+                        eventDiv.className = 'event';
                         
                         const config = locationConfig[event.location];
                         const isDarkTheme = document.body.classList.contains('dark-theme');
                         
                         if (isDarkTheme) {
-                            eventDiv.style.backgroundColor = isHidden ? '#333' : config.bgColor.replace('ff', '33');
+                            eventDiv.style.backgroundColor = config.bgColor.replace('ff', '33');
                             eventDiv.style.borderLeftColor = config.borderColor;
                         } else {
-                            eventDiv.style.backgroundColor = isHidden ? config.hiddenColor : config.bgColor;
-                            eventDiv.style.borderLeftColor = isHidden ? config.hiddenBorder : config.borderColor;
+                            eventDiv.style.backgroundColor = config.bgColor;
+                            eventDiv.style.borderLeftColor = config.borderColor;
                         }
                         
                         const isPassed = isDatePassed(event.date, event.time);
@@ -1693,24 +1685,24 @@
                         eventDiv.appendChild(timeSpan);
                         eventDiv.appendChild(titleSpan);
                         
-                        if (!isHidden) {
-                            eventDiv.addEventListener('mouseenter', (e) => {
-                                showTooltip(e, event);
-                            });
-                            
-                            eventDiv.addEventListener('mouseleave', removeTooltip);
-                            
-                            eventDiv.addEventListener('click', (e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                showEventModal(event, day);
-                            });
-                        }
+                        // 添加懸停和點擊事件
+                        eventDiv.addEventListener('mouseenter', (e) => {
+                            showTooltip(e, event);
+                        });
+                        
+                        eventDiv.addEventListener('mouseleave', removeTooltip);
+                        
+                        eventDiv.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            showEventModal(event, day);
+                        });
                         
                         dayCell.appendChild(eventDiv);
                     });
                 }
                 
+                // 如果該天沒有任何可見事件，顯示"暫無活動"
                 if (!hasVisibleDayEvents) {
                     const noEvent = document.createElement('div');
                     noEvent.className = 'event';
@@ -1731,6 +1723,7 @@
                 calendarGrid.appendChild(dayCell);
             });
             
+            // 更新無活動訊息
             if (!hasVisibleEvents && hiddenLocations.size > 0) {
                 noEventsMessage.style.display = 'block';
                 noEventsMessage.textContent = hiddenLocations.size === 3 ? 
