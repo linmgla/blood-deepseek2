@@ -5,13 +5,1071 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>血染鐘樓活動行事曆 by 曉風</title>
     <style>
-        /* 所有CSS樣式保持完全一致，這裡省略以節省空間 */
-        /* 請確保使用原始的完整CSS代碼 */
+        /* 所有之前的 CSS 樣式保持不變 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            padding: 20px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        body.dark-theme {
+            color: #e9ecef;
+            background-color: #121212;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #6c757d;
+            border-radius: 15px;
+            color: white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.3s ease;
+            flex-wrap: wrap;
+        }
+        
+        .dark-theme header {
+            background: #2c2c2c;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+        
+        .header-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .header-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .title-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-shrink: 1;
+            min-width: 0;
+            max-width: 100%;
+        }
+        
+        h1 {
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            line-height: 1.2;
+            word-wrap: break-word;
+            text-align: center;
+        }
+        
+        .by-text {
+            font-size: 1rem;
+            font-weight: normal;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 5px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+        
+        .theme-toggle {
+            position: relative;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            font-size: 14px;
+        }
+        
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+        
+        /* 暗色主題下按鈕顏色改為與亮色主題相同 */
+        .dark-theme .theme-toggle,
+        .dark-theme .refresh-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            color: white;
+        }
+        
+        .dark-theme .theme-toggle:hover,
+        .dark-theme .refresh-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .refresh-btn {
+            position: relative;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            font-size: 14px;
+        }
+        
+        .refresh-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+        
+        .refresh-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        
+        .loading-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .loading-content {
+            background: white;
+            padding: 30px 40px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-width: 90%;
+        }
+        
+        .dark-theme .loading-content {
+            background: #2c2c2c;
+            color: white;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4dabf7;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        .dark-theme .loading-spinner {
+            border: 4px solid #555;
+            border-top: 4px solid #4dabf7;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .update-info {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background: #e7f5ff;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #1864ab;
+            text-align: center;
+            transition: all 0.3s ease;
+            word-break: break-word;
+        }
+        
+        .dark-theme .update-info {
+            background: #1a365d;
+            color: #90cdf4;
+        }
+        
+        .filters-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .dark-theme .filters-container {
+            background: #2c2c2c;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .filter-label {
+            font-weight: 600;
+            color: #555;
+            transition: color 0.3s ease;
+            flex-shrink: 0;
+        }
+        
+        .dark-theme .filter-label {
+            color: #e9ecef;
+        }
+        
+        .filter-btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+            outline: none;
+            flex-shrink: 0;
+        }
+        
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .dark-theme .filter-btn:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .filter-btn:active {
+            transform: translateY(0);
+        }
+        
+        .calendar-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .dark-theme .calendar-container {
+            background: #2c2c2c;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: #e9ecef;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            min-width: 800px;
+        }
+        
+        @media (max-width: 1024px) {
+            .calendar-grid {
+                min-width: 700px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .calendar-grid {
+                min-width: 600px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .calendar-grid {
+                min-width: 450px;
+            }
+        }
+        
+        .dark-theme .calendar-grid {
+            background: #444;
+            border-color: #444;
+        }
+        
+        .weekday-header {
+            display: contents;
+        }
+        
+        .weekday-cell {
+            background: #495057;
+            color: white;
+            text-align: center;
+            padding: 15px 5px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            min-width: 100px;
+        }
+        
+        .dark-theme .weekday-cell {
+            background: #3a3a3a;
+        }
+        
+        .day-cell {
+            background: white;
+            min-height: 120px;
+            padding: 12px;
+            position: relative;
+            border-bottom: 1px solid #f1f3f5;
+            transition: all 0.3s ease;
+            min-width: 100px;
+        }
+        
+        .dark-theme .day-cell {
+            background: #2c2c2c;
+            border-bottom: 1px solid #444;
+        }
+        
+        .day-cell.today {
+            background-color: #fff9e6;
+            border: 2px solid #ffc107;
+            box-shadow: inset 0 0 8px rgba(255, 193, 7, 0.2);
+        }
+        
+        .dark-theme .day-cell.today {
+            background-color: #332d1a;
+            border: 2px solid #ffc107;
+            box-shadow: inset 0 0 8px rgba(255, 193, 7, 0.3);
+        }
+        
+        .day-number {
+            font-size: 16px;
+            font-weight: 700;
+            color: #212529;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: color 0.3s ease;
+        }
+        
+        .dark-theme .day-number {
+            color: #e9ecef;
+        }
+        
+        .date-text {
+            font-size: 12px;
+            color: #6c757d;
+            transition: color 0.3s ease;
+        }
+        
+        .dark-theme .date-text {
+            color: #adb5bd;
+        }
+        
+        .event {
+            padding: 8px 10px;
+            margin: 6px 0;
+            font-size: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-left: 4px solid;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            overflow: hidden;
+        }
+        
+        .event:hover {
+            transform: translateX(3px);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+        }
+        
+        .dark-theme .event:hover {
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+        }
+        
+        .event-time {
+            font-weight: 600;
+            font-size: 11px;
+            min-width: 30px;
+            flex-shrink: 0;
+        }
+        
+        .event-title {
+            font-weight: 500;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 12px;
+        }
+        
+        .dark-theme .event .event-time,
+        .dark-theme .event .event-title {
+            color: white;
+        }
+        
+        .empty-cell {
+            background: #f8f9fa;
+            color: #adb5bd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-style: italic;
+            min-height: 120px;
+            transition: all 0.3s ease;
+            min-width: 100px;
+        }
+        
+        .dark-theme .empty-cell {
+            background: #2c2c2c;
+            color: #777;
+        }
+        
+        .no-events-message {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6c757d;
+            font-size: 1.1rem;
+            display: none;
+            transition: color 0.3s ease;
+        }
+        
+        .dark-theme .no-events-message {
+            color: #adb5bd;
+        }
+        
+        .status-bar {
+            margin-top: 20px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .status-indicator {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .indicator-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        
+        .instructions {
+            margin-top: 30px;
+            padding: 20px;
+            background: #fff3cd;
+            border-radius: 10px;
+            border-left: 4px solid #ffc107;
+            transition: all 0.3s ease;
+        }
+        
+        .dark-theme .instructions {
+            background: #332d1a;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .instructions h3 {
+            color: #856404;
+            margin-bottom: 10px;
+            transition: color 0.3s ease;
+        }
+        
+        .dark-theme .instructions h3 {
+            color: #ffd54f;
+        }
+        
+        .instructions ul {
+            margin-left: 20px;
+            color: #856404;
+            transition: color 0.3s ease;
+        }
+        
+        .dark-theme .instructions ul {
+            color: #ffd54f;
+        }
+        
+        .instructions li {
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .custom-tooltip {
+            position: fixed;
+            background-color: #333;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            z-index: 1000;
+            max-width: 250px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            white-space: nowrap;
+            text-align: center;
+        }
+        
+        .dark-theme .custom-tooltip {
+            background-color: #000;
+        }
+        
+        .custom-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent;
+        }
+        
+        .dark-theme .custom-tooltip::after {
+            border-color: #000 transparent transparent transparent;
+        }
+        
+        .event-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            padding: 20px;
+        }
+        
+        .event-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .dark-theme .modal-content {
+            background-color: #2c2c2c;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+        
+        .modal-header {
+            background-color: #6c757d;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        
+        .dark-theme .modal-header {
+            background-color: #3a3a3a;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            font-size: 1.4rem;
+            word-break: break-word;
+        }
+        
+        .modal-body {
+            padding: 24px;
+        }
+        
+        .event-detail {
+            margin-bottom: 16px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .event-detail-icon {
+            font-size: 20px;
+            margin-right: 12px;
+            min-width: 30px;
+            flex-shrink: 0;
+        }
+        
+        .event-detail-text {
+            flex: 1;
+            font-size: 15px;
+            line-height: 1.6;
+            transition: color 0.3s ease;
+            word-break: break-word;
+        }
+        
+        .dark-theme .event-detail-text {
+            color: #e9ecef;
+        }
+        
+        .modal-footer {
+            padding: 16px 24px;
+            background-color: #f8f9fa;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            position: sticky;
+            bottom: 0;
+        }
+        
+        .dark-theme .modal-footer {
+            background-color: #3a3a3a;
+        }
+        
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            color: white;
+            min-width: 100px;
+        }
+        
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .dark-theme .modal-btn:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        
+        .modal-btn.secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        /* 暗色主題下模態框按鈕顏色改為與亮色主題相同 */
+        .dark-theme .modal-btn {
+            background-color: #4dabf7;
+            color: white;
+        }
+        
+        .dark-theme .modal-btn.secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .dark-theme .modal-btn:hover {
+            background-color: #339af0;
+        }
+        
+        .dark-theme .modal-btn.secondary:hover {
+            background-color: #5a6268;
+        }
+        
+        .modal-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+        
+        .error-message {
+            background: #fff5f5;
+            border: 1px solid #feb2b2;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            color: #c53030;
+            display: none;
+            transition: all 0.3s ease;
+            word-break: break-word;
+        }
+        
+        .dark-theme .error-message {
+            background: #2a1a1a;
+            border: 1px solid #822727;
+            color: #fc8181;
+        }
+        
+        .error-message.active {
+            display: block;
+        }
+        
+        /* 新增手機端樣式優化 */
+        .header-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            width: 100%;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            header {
+                flex-direction: column;
+                padding: 15px;
+                gap: 15px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                width: 100%;
+            }
+            
+            .header-logo {
+                width: 60px;
+                height: 60px;
+            }
+            
+            h1 {
+                font-size: 1.6rem;
+            }
+            
+            .theme-toggle, .refresh-btn {
+                width: auto;
+                padding: 8px 15px;
+                font-size: 13px;
+            }
+            
+            .filters {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .filter-btn {
+                width: 100%;
+                text-align: center;
+                padding: 8px 15px;
+            }
+            
+            .calendar-container {
+                padding: 15px;
+                margin-left: -10px;
+                margin-right: -10px;
+                width: calc(100% + 20px);
+                border-radius: 0;
+            }
+            
+            .day-cell {
+                min-height: 100px;
+                padding: 8px;
+            }
+            
+            .event {
+                font-size: 11px;
+                padding: 5px 8px;
+                margin: 4px 0;
+            }
+            
+            .event-time {
+                font-size: 10px;
+                min-width: 28px;
+            }
+            
+            .event-title {
+                font-size: 11px;
+            }
+            
+            .status-bar {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+                padding: 15px;
+            }
+            
+            .status-indicator {
+                justify-content: center;
+                font-size: 12px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10px;
+            }
+            
+            .modal-footer {
+                flex-direction: column;
+            }
+            
+            .modal-btn {
+                width: 100%;
+            }
+            
+            .instructions {
+                padding: 15px;
+            }
+            
+            .instructions ul {
+                margin-left: 15px;
+            }
+            
+            .instructions li {
+                font-size: 13px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.4rem;
+            }
+            
+            .day-number {
+                font-size: 14px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 2px;
+            }
+            
+            .date-text {
+                font-size: 11px;
+            }
+            
+            .calendar-grid {
+                min-width: 100%;
+            }
+            
+            .weekday-cell, .day-cell, .empty-cell {
+                min-width: 80px;
+            }
+            
+            .event-time {
+                font-size: 9px;
+                min-width: 25px;
+            }
+            
+            .event-title {
+                font-size: 10px;
+            }
+        }
+        
+        /* 新增手機端橫向滾動提示 */
+        .mobile-scroll-hint {
+            display: none;
+            text-align: center;
+            margin-top: 10px;
+            padding: 10px;
+            background: #e7f5ff;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #1864ab;
+            font-weight: 500;
+        }
+        
+        .dark-theme .mobile-scroll-hint {
+            background: #1a365d;
+            color: #90cdf4;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-scroll-hint {
+                display: block;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- HTML結構保持完全一致，這裡省略以節省空間 -->
-    <!-- 請確保使用原始的完整HTML結構 -->
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="header-logo">
+                    <img src="https://i.meee.com.tw/ctqdoRm.png" alt="血染鐘樓 Logo" loading="lazy">
+                </div>
+                <div class="title-container">
+                    <h1>血染鐘樓活動行事曆</h1>
+                    <div class="by-text">by 曉風</div>
+                </div>
+            </div>
+            <div class="header-controls">
+                <button class="theme-toggle" id="themeToggle">🌙 暗色主題</button>
+                <button class="refresh-btn" id="refreshBtn">🔄 重新整理</button>
+            </div>
+        </header>
+        
+        <div class="error-message" id="errorMessage"></div>
+        
+        <div class="update-info" id="updateInfo">
+            正在載入數據...
+        </div>
+        
+        <div class="mobile-scroll-hint" id="mobileScrollHint">
+            ← 左右滑動查看完整行事曆 →
+        </div>
+        
+        <div class="filters-container">
+            <div class="filters" id="filters">
+                <div class="filter-label">地點篩選：</div>
+            </div>
+        </div>
+        
+        <div class="calendar-container">
+            <div class="calendar-grid" id="calendarGrid">
+                <div class="weekday-header">
+                    <div class="weekday-cell">日</div>
+                    <div class="weekday-cell">一</div>
+                    <div class="weekday-cell">二</div>
+                    <div class="weekday-cell">三</div>
+                    <div class="weekday-cell">四</div>
+                    <div class="weekday-cell">五</div>
+                    <div class="weekday-cell">六</div>
+                </div>
+            </div>
+            
+            <div class="no-events-message" id="noEvents">
+                目前選擇的地點沒有活動安排
+            </div>
+            
+            <div class="status-bar" id="statusBar">
+                <div>顯示所有地點的活動</div>
+                <div class="status-indicator">
+                    <div class="indicator-dot" style="background: #4dabf7"></div>
+                    <span>101鐘樓</span>
+                    <div class="indicator-dot" style="background: #da77f2; margin-left: 10px"></div>
+                    <span>歪常研究院</span>
+                    <div class="indicator-dot" style="background: #3a8c4a; margin-left: 10px"></div>
+                    <span>小怪寶家長會</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="event-modal" id="eventModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitle">活動詳細資訊</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="event-detail">
+                        <div class="event-detail-icon">📅</div>
+                        <div class="event-detail-text" id="modalDate">日期：</div>
+                    </div>
+                    <div class="event-detail">
+                        <div class="event-detail-icon">⏰</div>
+                        <div class="event-detail-text" id="modalTime">時間：</div>
+                    </div>
+                    <div class="event-detail">
+                        <div class="event-detail-icon">📍</div>
+                        <div class="event-detail-text" id="modalLocation">地點：</div>
+                    </div>
+                    <div class="event-detail">
+                        <div class="event-detail-icon">🎭</div>
+                        <div class="event-detail-text" id="modalScript">劇本：</div>
+                    </div>
+                    <div class="event-detail">
+                        <div class="event-detail-icon">📖</div>
+                        <div class="event-detail-text" id="modalStoryteller">說書人：</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="modal-btn" id="modalLinkBtn">前往報名</button>
+                    <button class="modal-btn secondary" id="modalCloseBtn">關閉</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <div>正在從 Google Sheets 載入數據...</div>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h3>📝 使用說明</h3>
+            <ul>
+                <li>點擊上方地點按鈕可切換顯示/隱藏該地點活動</li>
+                <li>按鈕顏色變淡表示該地點活動已隱藏</li>
+                <li>滑鼠懸停在活動上可查看簡要資訊</li>
+                <li>點擊活動可查看詳細資訊並前往連結</li>
+                <li>活動時間均為24小時制</li>
+                <li>已過期的活動按鈕顯示為「前往查看」</li>
+                <li>點擊「重新整理」按鈕可從 Google Sheets 獲取最新數據</li>
+                <li>數據會自動緩存 5 分鐘，減少不必要的網絡請求</li>
+                <li>點擊「切換暗色主題」可切換亮色/暗色主題</li>
+                <li><strong>手機用戶：可左右滑動查看完整行事曆</strong></li>
+            </ul>
+        </div>
+    </div>
 
     <script>
         // Google Sheets CSV URL
@@ -25,28 +1083,34 @@
         // 全局變量
         let eventData = [];
         
-        // 地點顏色配置 - 完全保持原始設定
+        // 地點顏色配置
         const locationConfig = {
             "101鐘樓": {
                 color: "#4dabf7",
                 bgColor: "#e7f5ff",
                 borderColor: "#4dabf7",
                 hiddenColor: "#f0f8ff",
-                hiddenBorder: "#a5d8ff"
+                hiddenBorder: "#a5d8ff",
+                darkBgColor: "rgba(77, 171, 247, 0.2)",
+                darkHiddenBgColor: "rgba(77, 171, 247, 0.05)"
             },
             "歪常研究院": {
                 color: "#da77f2",
                 bgColor: "#f8f0fc",
                 borderColor: "#da77f2",
                 hiddenColor: "#fdf2ff",
-                hiddenBorder: "#e599f7"
+                hiddenBorder: "#e599f7",
+                darkBgColor: "rgba(218, 119, 242, 0.2)",
+                darkHiddenBgColor: "rgba(218, 119, 242, 0.05)"
             },
             "小怪寶家長會": {
                 color: "#3a8c4a",
                 bgColor: "#e6f7e9",
                 borderColor: "#3a8c4a",
                 hiddenColor: "#f0f9f2",
-                hiddenBorder: "#a3d9b1"
+                hiddenBorder: "#a3d9b1",
+                darkBgColor: "rgba(58, 140, 74, 0.2)",
+                darkHiddenBgColor: "rgba(58, 140, 74, 0.05)"
             }
         };
 
@@ -466,7 +1530,7 @@
             modal.classList.add('active');
         }
         
-        // 生成篩選按鈕 - 完全恢復原始邏輯
+        // 生成篩選按鈕 - 已修正暗色主題顯示問題，讓暗色主題使用亮色主題的顏色
         function generateFilterButtons() {
             const filtersContainer = document.getElementById('filters');
             
@@ -477,21 +1541,22 @@
             Object.keys(locationConfig).forEach(location => {
                 const isHidden = hiddenLocations.has(location);
                 const config = locationConfig[location];
-                const isDarkTheme = document.body.classList.contains('dark-theme');
                 
                 const button = document.createElement('button');
-                button.className = `filter-btn ${isHidden ? 'hidden' : ''}`;
+                button.className = 'filter-btn';
                 button.textContent = location;
                 
-                // 完全恢復原始的色彩設定
-                if (isDarkTheme) {
-                    button.style.backgroundColor = isHidden ? '#333' : config.bgColor.replace('ff', '33');
+                // 無論是亮色還是暗色主題，都使用亮色主題的顏色配置
+                if (isHidden) {
+                    // 隱藏狀態的按鈕
+                    button.style.backgroundColor = config.hiddenColor;
+                    button.style.color = '#adb5bd';
+                    button.style.border = `2px solid ${config.hiddenBorder}`;
+                } else {
+                    // 顯示狀態的按鈕
+                    button.style.backgroundColor = config.bgColor;
                     button.style.color = config.color;
                     button.style.border = `2px solid ${config.borderColor}`;
-                } else {
-                    button.style.backgroundColor = isHidden ? config.hiddenColor : config.bgColor;
-                    button.style.color = isHidden ? '#adb5bd' : config.color;
-                    button.style.border = `2px solid ${isHidden ? config.hiddenBorder : config.borderColor}`;
                 }
                 
                 button.addEventListener('click', () => toggleLocation(location));
@@ -551,7 +1616,7 @@
             }
         }
         
-        // 生成日曆 - 修改為完全隱藏被篩選掉的活動，但保持事件顏色設定
+        // 生成日曆 - 已修改為完全隱藏被篩選掉的活動
         function generateCalendar() {
             const calendarGrid = document.getElementById('calendarGrid');
             const noEventsMessage = document.getElementById('noEvents');
@@ -602,6 +1667,7 @@
                 dayCell.appendChild(dayNumber);
                 
                 const dayEvents = getEventsForDate(day.fullDate);
+                // 篩選出未隱藏的事件
                 const visibleDayEvents = dayEvents.filter(event => !hiddenLocations.has(event.location));
                 let hasVisibleDayEvents = false;
                 
@@ -615,16 +1681,10 @@
                         eventDiv.className = 'event';
                         
                         const config = locationConfig[event.location];
-                        const isDarkTheme = document.body.classList.contains('dark-theme');
                         
-                        // 完全恢復原始的顏色設定
-                        if (isDarkTheme) {
-                            eventDiv.style.backgroundColor = config.bgColor.replace('ff', '33');
-                            eventDiv.style.borderLeftColor = config.borderColor;
-                        } else {
-                            eventDiv.style.backgroundColor = config.bgColor;
-                            eventDiv.style.borderLeftColor = config.borderColor;
-                        }
+                        // 無論是亮色還是暗色主題，都使用亮色主題的顏色配置
+                        eventDiv.style.backgroundColor = config.bgColor;
+                        eventDiv.style.borderLeftColor = config.borderColor;
                         
                         const isPassed = isDatePassed(event.date, event.time);
                         if (isPassed) {
