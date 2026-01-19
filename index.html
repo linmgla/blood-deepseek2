@@ -20,10 +20,10 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
         
-        /* 暗色主題 - 按照(10)的設定 */
+        /* 暗色主題修正 */
         body.dark-theme {
             color: #e9ecef;
-            background-color: #121212;
+            background-color: #1a1a1a;
         }
         
         .container {
@@ -47,7 +47,8 @@
         }
         
         .dark-theme header {
-            background: #2c2c2c;
+            background: #333;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
         
         .header-content {
@@ -139,7 +140,8 @@
         }
         
         .dark-theme .filters-container {
-            background: #2c2c2c;
+            background: #2d2d2d;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
         
         .search-input {
@@ -154,7 +156,7 @@
         }
         
         .dark-theme .search-input {
-            background: #1e1e1e;
+            background: #1a1a1a;
             border-color: #444;
             color: white;
         }
@@ -212,10 +214,11 @@
         }
         
         .dark-theme .calendar-container {
-            background: #2c2c2c;
+            background: #2d2d2d;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
         
-        /* 網格模式 - 使用(11)的網格樣式，但套用(10)的暗色主題 */
+        /* 網格模式 */
         .view-grid .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
@@ -251,9 +254,8 @@
             border-bottom: 1px solid #f1f3f5;
         }
         
-        /* 暗色主題日曆單元格 - 按照(10)設定 */
         .dark-theme .view-grid .day-cell {
-            background: #2c2c2c;
+            background: #2d2d2d;
             border-bottom-color: #444;
         }
         
@@ -263,9 +265,8 @@
             box-shadow: inset 0 0 8px rgba(255, 193, 7, 0.2);
         }
         
-        /* 暗色主題今天日期 - 按照(10)設定 */
         .dark-theme .view-grid .day-cell.today {
-            background-color: #2d2a1a;
+            background-color: #3a3520;
             border-color: #ffc107;
         }
         
@@ -326,7 +327,7 @@
             text-overflow: ellipsis;
         }
         
-        /* 無活動樣式 - 暗色主題按照(10)設定 */
+        /* 無活動樣式修正 */
         .event.no-event {
             background-color: #f1f3f5;
             color: #adb5bd;
@@ -334,8 +335,9 @@
             cursor: default;
         }
         
+        /* 修正：暫無活動按鈕的動畫與正常按鈕相同，且無陰影 */
         .event.no-event:hover {
-            transform: none;
+            transform: translateX(3px);
             box-shadow: none;
             background-color: #e9ecef;
         }
@@ -347,10 +349,11 @@
         }
         
         .dark-theme .event.no-event:hover {
-            background-color: #252525;
+            background-color: #333;
+            box-shadow: none;
         }
         
-        /* 過期活動樣式 - 按照(10)設定 */
+        /* 過期活動樣式 */
         .event.passed {
             opacity: 0.6;
         }
@@ -370,66 +373,45 @@
             min-height: auto;
             padding: 15px;
             border-bottom: 1px solid #eee;
-            background: white;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
         
-        /* 暗色主題清單模式單元格 - 按照(10)設定 */
         .dark-theme .view-list .day-cell {
-            background: #2c2c2c;
             border-bottom-color: #444;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
         
         .view-list .day-cell.has-events {
             display: block;
         }
         
-        .view-list .day-cell.today {
-            background-color: #fff9db;
-            border: 2px solid #ffc107;
-        }
-        
-        /* 暗色主題清單模式今天日期 - 按照(10)設定 */
-        .dark-theme .view-list .day-cell.today {
-            background-color: #2d2a1a;
-            border-color: #ffc107;
-        }
-        
         .view-list .day-number {
-            font-size: 16px;
-            color: #1a73e8;
             margin-bottom: 10px;
+            border-bottom: 1px dashed #eee;
+            padding-bottom: 5px;
         }
         
         .dark-theme .view-list .day-number {
-            color: #4dabf7;
+            border-bottom-color: #444;
         }
         
-        /* 狀態欄 - 暗色主題按照(10)設定 */
+        /* 狀態欄 */
         .status-bar {
             margin-top: 20px;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            background-color: #e7f5ff;
-            color: #1864ab;
+            align-items: center;
+            font-size: 14px;
+            color: #666;
         }
         
         .dark-theme .status-bar {
-            background-color: #2c2c2c;
-            color: #e9ecef;
+            border-top-color: #444;
+            color: #aaa;
         }
         
         .status-indicator {
             display: flex;
-            gap: 10px;
             align-items: center;
         }
         
@@ -437,51 +419,38 @@
             width: 10px;
             height: 10px;
             border-radius: 50%;
+            margin-right: 5px;
         }
         
-        /* 自定義提示框樣式 */
+        /* 提示框 */
         .custom-tooltip {
             position: fixed;
-            background-color: #333;
+            background: rgba(0, 0, 0, 0.8);
             color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
+            padding: 5px 10px;
+            border-radius: 4px;
             font-size: 12px;
             z-index: 1000;
-            max-width: 250px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            white-space: nowrap;
+            display: none;
+            transition: opacity 0.2s;
         }
         
-        .custom-tooltip::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: #333 transparent transparent transparent;
-        }
-        
-        /* 活動詳細資訊模態框 - 暗色主題按照(10)設定 */
+        /* 模態框 */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background: rgba(0,0,0,0.5);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 2000;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
+            transition: all 0.3s ease;
         }
         
         .modal-overlay.active {
@@ -490,16 +459,22 @@
         }
         
         .modal-content {
-            background-color: white;
-            border-radius: 12px;
+            background: white;
             width: 90%;
             max-width: 500px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
             overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+        
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
         }
         
         .dark-theme .modal-content {
-            background-color: #2c2c2c;
+            background-color: #2d2d2d;
             color: white;
         }
         
@@ -508,6 +483,10 @@
             color: white;
             padding: 20px;
             text-align: center;
+        }
+        
+        .dark-theme .modal-header {
+            background-color: #444;
         }
         
         .modal-header h3 {
@@ -787,66 +766,57 @@
                     let line = lines[i];
                     for (let j = 0; j < line.length; j++) {
                         let c = line[j];
-                        if (c === '"') {
-                            if (q && line[j+1] === '"') { cur += '"'; j++; }
-                            else q = !q;
-                        } else if (c === ',' && !q) {
-                            vals.push(cur.trim().replace(/^"|"$/g, ''));
+                        if (c === '"') q = !q;
+                        else if (c === ',' && !q) {
+                            vals.push(cur.trim());
                             cur = '';
                         } else cur += c;
                     }
-                    vals.push(cur.trim().replace(/^"|"$/g, ''));
-
-                    const row = {};
-                    headers.forEach((h, idx) => row[h] = vals[idx] || '');
+                    vals.push(cur.trim());
                     
-                    const dateStr = row['日期'] || '';
-                    const [m, d] = dateStr.split('/');
-                    if (!m || !d) continue;
-                    
-                    events.push({
-                        date: `2026-${m.padStart(2,'0')}-${d.padStart(2,'0')}`,
-                        time: row['時間'] || '',
-                        loc: row['地點'] || '未指定',
-                        script: row['劇本名稱'] || '未命名劇本',
-                        st: row['說書人'] || '待確認',
-                        link: row['報名連結'] || '#'
+                    const e = {};
+                    headers.forEach((h, idx) => {
+                        let v = vals[idx] || '';
+                        if (v.startsWith('"') && v.endsWith('"')) v = v.substring(1, v.length - 1);
+                        e[h] = v;
                     });
+                    
+                    if (e.date && e.loc && e.script) {
+                        events.push({
+                            date: e.date,
+                            time: e.time || '',
+                            loc: e.loc,
+                            script: e.script,
+                            st: e.st || '',
+                            link: e.link || '#'
+                        });
+                    }
                 }
                 render();
-            } catch (e) { 
-                console.error(e);
-                document.getElementById('countText').textContent = "載入失敗"; 
+            } catch (err) {
+                console.error("載入失敗:", err);
+                document.getElementById('countText').textContent = "載入失敗，請稍後再試";
             }
         }
 
         function render() {
-            // 生成篩選按鈕
             const f = document.getElementById('filters');
             f.innerHTML = '<div class="filter-label">地點篩選：</div>';
-            Object.keys(locConfig).forEach(l => {
+            
+            const locs = ["101鐘樓", "歪常研究所", "小怪寶家長會"];
+            locs.forEach(l => {
                 const b = document.createElement('button');
                 b.className = 'filter-btn';
+                const isHidden = hiddenLocs.has(l);
+                const config = locConfig[l];
+                
+                b.style.backgroundColor = isHidden ? '#eee' : config.color;
+                b.style.color = isHidden ? '#999' : 'white';
                 b.textContent = l;
-                const isH = hiddenLocs.has(l);
-                const c = locConfig[l];
-                const isD = document.body.classList.contains('dark-theme');
                 
-                if (isH) {
-                    b.style.backgroundColor = isD ? c.darkBg + '40' : '#f8f9fa';
-                    b.style.color = isD ? '#888' : '#adb5bd';
-                    b.style.border = `2px solid ${isD ? '#555' : '#dee2e6'}`;
-                    b.style.opacity = '0.7';
-                } else {
-                    b.style.backgroundColor = isD ? c.darkBg : c.bg;
-                    b.style.color = isD ? '#fff' : c.color;
-                    b.style.border = `2px solid ${c.borderColor}`;
-                    b.style.opacity = '1';
-                }
-                
-                b.onclick = () => { 
-                    if(hiddenLocs.has(l)) {
-                        hiddenLocs.delete(l); 
+                b.onclick = () => {
+                    if (hiddenLocs.has(l)) {
+                        hiddenLocs.delete(l);
                     } else {
                         hiddenLocs.add(l); 
                     } 
@@ -855,23 +825,18 @@
                 f.appendChild(b);
             });
             
-            // 更新狀態欄
             updateStatusBar();
             
-            // 生成日曆
             const grid = document.getElementById('calendarGrid');
             grid.innerHTML = '';
             
             const y = 2026, m = 1;
             const days = new Date(y, m, 0).getDate();
             const today = new Date().toISOString().split('T')[0];
-            
-            // 檢查是否是清單模式
             const isListMode = document.body.classList.contains('view-list');
+            const isD = document.body.classList.contains('dark-theme');
             
             if (!isListMode) {
-                // 網格模式
-                // 先添加星期表頭
                 const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
                 weekdays.forEach(day => {
                     const weekdayCell = document.createElement('div');
@@ -880,32 +845,18 @@
                     grid.appendChild(weekdayCell);
                 });
                 
-                // 2026年1月1日是星期四，所以前面需要添加空白單元格
-                // 星期天=0, 星期一=1, 星期二=2, 星期三=3, 星期四=4
-                // 所以需要添加4個空白單元格（日、一、二、三）
-                const firstDayOfMonth = new Date(y, m-1, 1).getDay(); // 2026年1月1日是星期四，所以是4
-                
+                const firstDayOfMonth = new Date(y, m-1, 1).getDay();
                 for (let i = 0; i < firstDayOfMonth; i++) {
                     const emptyCell = document.createElement('div');
                     emptyCell.className = 'day-cell';
-                    const isD = document.body.classList.contains('dark-theme');
-                    emptyCell.style.backgroundColor = isD ? '#2c2c2c' : '#f8f9fa';
-                    emptyCell.style.minHeight = '120px';
-                    emptyCell.style.display = 'flex';
-                    emptyCell.style.alignItems = 'center';
-                    emptyCell.style.justifyContent = 'center';
-                    emptyCell.style.color = isD ? '#666' : '#adb5bd';
-                    emptyCell.style.fontStyle = 'italic';
+                    emptyCell.style.backgroundColor = isD ? '#252525' : '#f8f9fa';
                     grid.appendChild(emptyCell);
                 }
             }
             
             let total = 0;
-            
-            // 如果是清單模式，只處理有活動的日期
             let dateRange = [];
             if (isListMode) {
-                // 收集所有有活動的日期
                 const datesWithEvents = new Set();
                 events.forEach(e => {
                     if (!hiddenLocs.has(e.loc) && (!query || e.script.includes(query) || e.st.includes(query) || e.loc.includes(query))) {
@@ -914,7 +865,6 @@
                 });
                 dateRange = Array.from(datesWithEvents).sort();
             } else {
-                // 網格模式：處理整個月的日期
                 for (let d=1; d<=days; d++) {
                     dateRange.push(`${y}-${m.toString().padStart(2,'0')}-${d.toString().padStart(2,'0')}`);
                 }
@@ -937,15 +887,12 @@
                     (!query || e.script.includes(query) || e.st.includes(query) || e.loc.includes(query)));
 
                 if (filtered.length > 0) {
-                    if (isListMode) {
-                        cell.classList.add('has-events');
-                    }
+                    if (isListMode) cell.classList.add('has-events');
                     total += filtered.length;
                     filtered.forEach(e => {
                         const div = document.createElement('div');
                         div.className = 'event';
                         const c = locConfig[e.loc] || { color: "#999", bg: "#f0f0f0", darkBg: "#333", borderColor: "#999" };
-                        const isD = document.body.classList.contains('dark-theme');
                         div.style.backgroundColor = isD ? c.darkBg : c.bg;
                         div.style.color = isD ? '#fff' : '#333';
                         div.style.borderLeftColor = c.borderColor;
@@ -958,26 +905,16 @@
                             t.textContent = `${e.loc} - ${e.script}`;
                             t.style.opacity = '1';
                             t.style.display = 'block';
-                            
                             const rect = div.getBoundingClientRect();
-                            let top = rect.top - 40;
-                            let left = rect.left + rect.width / 2;
-                            
-                            if (top < 10) {
-                                top = rect.bottom + 10;
-                            }
-                            
+                            t.style.top = `${rect.top - 40}px`;
+                            t.style.left = `${rect.left + rect.width / 2}px`;
                             t.style.transform = 'translateX(-50%)';
-                            t.style.top = `${top}px`;
-                            t.style.left = `${left}px`;
                         };
                         
                         div.onmouseleave = () => {
                             const t = document.getElementById('tooltip');
                             t.style.opacity = '0';
-                            setTimeout(() => {
-                                t.style.display = 'none';
-                            }, 200);
+                            setTimeout(() => t.style.display = 'none', 200);
                         };
                         
                         div.onclick = () => openModal(e, {
@@ -987,7 +924,7 @@
                         });
                         cell.appendChild(div);
                     });
-                } else {
+                } else if (!isListMode) {
                     const none = document.createElement('div');
                     none.className = 'event no-event';
                     none.textContent = '暫無活動';
@@ -1001,102 +938,55 @@
 
         function updateStatusBar() {
             const statusText = document.getElementById('statusText');
-            
             const hiddenCount = hiddenLocs.size;
-            if (hiddenCount === 0) {
-                statusText.textContent = "顯示所有地點的活動";
-            } else if (hiddenCount === 3) {
-                statusText.textContent = "所有地點活動皆已隱藏";
-            } else {
-                const hiddenList = Array.from(hiddenLocs).join('、');
-                statusText.textContent = `已隱藏：${hiddenList}`;
-            }
+            if (hiddenCount === 0) statusText.textContent = "顯示所有地點的活動";
+            else if (hiddenCount === 3) statusText.textContent = "所有地點活動皆已隱藏";
+            else statusText.textContent = `已隱藏：${Array.from(hiddenLocs).join('、')}`;
         }
 
         function openModal(e, dayInfo) {
             const modal = document.getElementById('eventModal');
-            const modalTitle = document.getElementById('modalTitle');
-            const modalDate = document.getElementById('modalDate');
-            const modalTime = document.getElementById('modalTime');
-            const modalLocation = document.getElementById('modalLocation');
-            const modalScript = document.getElementById('modalScript');
-            const modalStoryteller = document.getElementById('modalStoryteller');
+            document.getElementById('modalTitle').textContent = e.script;
+            document.getElementById('modalDate').textContent = `日期：${dayInfo.month}/${dayInfo.date}（${dayInfo.weekday}）`;
+            document.getElementById('modalTime').textContent = `時間：${e.time ? e.time.substring(0, 5) : ''}`;
+            document.getElementById('modalLocation').textContent = `地點：${e.loc}`;
+            document.getElementById('modalScript').textContent = `劇本：${e.script}`;
+            document.getElementById('modalStoryteller').textContent = `說書人：${e.st || '待確認'}`;
+            
             const linkBtn = document.getElementById('modalLinkBtn');
-            const closeBtn = document.getElementById('modalCloseBtn');
-            
-            // 設置模態框內容
-            modalTitle.textContent = e.script;
-            modalDate.textContent = `日期：${dayInfo.month}/${dayInfo.date}（${dayInfo.weekday}）`;
-            
-            if (e.time && e.time.trim() !== "") {
-                modalTime.textContent = `時間：${e.time.substring(0, 5)}`;
-            } else {
-                modalTime.textContent = `時間：`;
-            }
-            
-            modalLocation.textContent = `地點：${e.loc}`;
-            modalScript.textContent = `劇本：${e.script}`;
-            modalStoryteller.textContent = `說書人：${e.st || '待確認'}`;
-            
-            // 檢查活動是否已過期
             const passed = new Date() > new Date(`${e.date}T${e.time || '00:00'}`);
             
-            // 設置連結按鈕
-            linkBtn.dataset.link = e.link || '#';
             if (e.link && e.link !== '#') {
-                if (passed) {
-                    linkBtn.textContent = '前往查看';
-                    linkBtn.style.backgroundColor = '#6c757d';
-                } else {
-                    linkBtn.textContent = '前往報名';
-                    linkBtn.style.backgroundColor = '#4dabf7';
-                }
-                linkBtn.style.display = 'inline-block';
+                linkBtn.textContent = passed ? '前往查看' : '前往報名';
+                linkBtn.style.backgroundColor = passed ? '#6c757d' : '#4dabf7';
                 linkBtn.disabled = false;
                 linkBtn.style.opacity = '1';
                 linkBtn.style.cursor = 'pointer';
+                linkBtn.onclick = () => window.open(e.link, '_blank');
             } else {
                 linkBtn.textContent = '無連結';
-                linkBtn.style.display = 'inline-block';
                 linkBtn.disabled = true;
                 linkBtn.style.opacity = '0.6';
                 linkBtn.style.cursor = 'not-allowed';
                 linkBtn.style.backgroundColor = '#6c757d';
             }
             
-            // 設置按鈕點擊事件
-            linkBtn.onclick = () => {
-                if (e.link && e.link !== '#') {
-                    window.open(e.link, '_blank');
-                }
-                modal.classList.remove('active');
-            };
-            
-            closeBtn.onclick = () => {
-                modal.classList.remove('active');
-            };
-            
-            // 點擊背景關閉模態框
-            modal.onclick = (event) => {
-                if (event.target === modal) {
-                    modal.classList.remove('active');
-                }
-            };
-            
-            // 顯示模態框
+            document.getElementById('modalCloseBtn').onclick = () => modal.classList.remove('active');
+            modal.onclick = (event) => { if (event.target === modal) modal.classList.remove('active'); };
             modal.classList.add('active');
         }
 
-        // 事件監聽器
         document.getElementById('gridBtn').onclick = () => {
-            document.body.className = document.body.classList.contains('dark-theme') ? 'view-grid dark-theme' : 'view-grid';
+            document.body.classList.remove('view-list');
+            document.body.classList.add('view-grid');
             document.getElementById('gridBtn').classList.add('active');
             document.getElementById('listBtn').classList.remove('active');
             render();
         };
         
         document.getElementById('listBtn').onclick = () => {
-            document.body.className = document.body.classList.contains('dark-theme') ? 'view-list dark-theme' : 'view-list';
+            document.body.classList.remove('view-grid');
+            document.body.classList.add('view-list');
             document.getElementById('listBtn').classList.add('active');
             document.getElementById('gridBtn').classList.remove('active');
             render();
@@ -1110,20 +1000,14 @@
         };
         
         document.getElementById('refreshBtn').onclick = () => load(true);
-        
-        document.getElementById('searchInput').oninput = (e) => { 
-            query = e.target.value.trim(); 
-            render(); 
-        };
+        document.getElementById('searchInput').oninput = (e) => { query = e.target.value.trim(); render(); };
 
-        // 初始化
         if (window.innerWidth <= 768) document.getElementById('listBtn').click();
         if (localStorage.getItem('theme') === 'dark') {
             document.body.classList.add('dark-theme');
             document.getElementById('themeBtn').textContent = '☀️ 亮色主題';
         }
         
-        // 設定時間顯示
         function updateTime() {
             const now = new Date();
             document.getElementById('timeText').textContent = 
@@ -1131,7 +1015,6 @@
         }
         setInterval(updateTime, 60000);
         updateTime();
-        
         load();
     </script>
 </body>
