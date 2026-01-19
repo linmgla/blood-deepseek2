@@ -5,1792 +5,475 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>血染鐘樓活動行事曆 by 曉風</title>
     <style>
-        /* 所有之前的 CSS 樣式保持不變 */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             line-height: 1.6;
             color: #333;
             background-color: #f8f9fa;
             padding: 20px;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: background-color 0.3s ease;
         }
-        
-        body.dark-theme {
-            color: #e9ecef;
-            background-color: #121212;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            width: 100%;
-        }
+        body.dark-theme { color: #e9ecef; background-color: #121212; }
+        .container { max-width: 1400px; margin: 0 auto; width: 100%; }
         
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             padding: 20px;
             background: #6c757d;
-            border-radius: 15px;
+            border-radius: 12px;
             color: white;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            position: relative;
-            transition: all 0.3s ease;
-            flex-wrap: wrap;
         }
-        
-        .dark-theme header {
-            background: #2c2c2c;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-        }
+        .dark-theme header { background: #2c2c2c; }
         
         .header-content {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
             flex-wrap: wrap;
-            width: 100%;
         }
-        
         .header-logo {
-            width: 80px;
-            height: 80px;
+            width: 55px;
+            height: 55px;
             border-radius: 10px;
             overflow: hidden;
-            background-color: white;
+            background: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-shrink: 0;
+            border: 2px solid white;
         }
+        .header-logo img { width: 100%; height: 100%; object-fit: cover; }
         
-        .header-logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .title-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex-shrink: 1;
-            min-width: 0;
-            max-width: 100%;
-        }
-        
-        h1 {
-            font-size: clamp(1.5rem, 5vw, 2.5rem);
-            margin: 0;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-            line-height: 1.2;
-            word-wrap: break-word;
-            text-align: center;
-        }
-        
-        .by-text {
-            font-size: 1rem;
-            font-weight: normal;
-            color: rgba(255, 255, 255, 0.9);
-            margin-top: 5px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-        }
-        
-        .theme-toggle {
-            position: relative;
-            padding: 10px 15px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            border-radius: 8px;
-            color: white;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-            font-size: 14px;
-        }
-        
-        .theme-toggle:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.05);
-        }
-        
-        /* 暗色主題下按鈕顏色改為與亮色主題相同 */
-        .dark-theme .theme-toggle,
-        .dark-theme .refresh-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            color: white;
-        }
-        
-        .dark-theme .theme-toggle:hover,
-        .dark-theme .refresh-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-        
-        .refresh-btn {
-            position: relative;
-            padding: 10px 15px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            border-radius: 8px;
-            color: white;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-            font-size: 14px;
-        }
-        
-        .refresh-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.05);
-        }
-        
-        .refresh-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-        
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-        
-        .loading-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .loading-content {
-            background: white;
-            padding: 30px 40px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            max-width: 90%;
-        }
-        
-        .dark-theme .loading-content {
-            background: #2c2c2c;
-            color: white;
-        }
-        
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #4dabf7;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
-        }
-        
-        .dark-theme .loading-spinner {
-            border: 4px solid #555;
-            border-top: 4px solid #4dabf7;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .update-info {
-            margin-top: 10px;
-            padding: 10px 15px;
-            background: #e7f5ff;
-            border-radius: 6px;
-            font-size: 14px;
-            color: #1864ab;
-            text-align: center;
-            transition: all 0.3s ease;
-            word-break: break-word;
-        }
-        
-        .dark-theme .update-info {
-            background: #1a365d;
-            color: #90cdf4;
-        }
-        
-        .filters-container {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            overflow: hidden;
-        }
-        
-        .dark-theme .filters-container {
-            background: #2c2c2c;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        
-        .filters {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            align-items: center;
-        }
-        
-        .filter-label {
-            font-weight: 600;
-            color: #555;
-            transition: color 0.3s ease;
-            flex-shrink: 0;
-        }
-        
-        .dark-theme .filter-label {
-            color: #e9ecef;
-        }
-        
-        .filter-btn {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.2s ease;
-            position: relative;
-            overflow: hidden;
-            outline: none;
-            flex-shrink: 0;
-        }
-        
-        .filter-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .dark-theme .filter-btn:hover {
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-        
-        .filter-btn:active {
-            transform: translateY(0);
-        }
-        
-        .calendar-container {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-        
-        .dark-theme .calendar-container {
-            background: #2c2c2c;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 1px;
-            background: #e9ecef;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            min-width: 800px;
-        }
-        
-        @media (max-width: 1024px) {
-            .calendar-grid {
-                min-width: 700px;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .calendar-grid {
-                min-width: 600px;
-                font-size: 0.9rem;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .calendar-grid {
-                min-width: 450px;
-            }
-        }
-        
-        .dark-theme .calendar-grid {
-            background: #444;
-            border-color: #444;
-        }
-        
-        .weekday-header {
-            display: contents;
-        }
-        
-        .weekday-cell {
-            background: #495057;
-            color: white;
-            text-align: center;
-            padding: 15px 5px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            min-width: 100px;
-        }
-        
-        .dark-theme .weekday-cell {
-            background: #3a3a3a;
-        }
-        
-        .day-cell {
-            background: white;
-            min-height: 120px;
-            padding: 12px;
-            position: relative;
-            border-bottom: 1px solid #f1f3f5;
-            transition: all 0.3s ease;
-            min-width: 100px;
-        }
-        
-        .dark-theme .day-cell {
-            background: #2c2c2c;
-            border-bottom: 1px solid #444;
-        }
-        
-        .day-cell.today {
-            background-color: #fff9e6;
-            border: 2px solid #ffc107;
-            box-shadow: inset 0 0 8px rgba(255, 193, 7, 0.2);
-        }
-        
-        .dark-theme .day-cell.today {
-            background-color: #332d1a;
-            border: 2px solid #ffc107;
-            box-shadow: inset 0 0 8px rgba(255, 193, 7, 0.3);
-        }
-        
-        .day-number {
-            font-size: 16px;
-            font-weight: 700;
-            color: #212529;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: color 0.3s ease;
-        }
-        
-        .dark-theme .day-number {
-            color: #e9ecef;
-        }
-        
-        .date-text {
-            font-size: 12px;
-            color: #6c757d;
-            transition: color 0.3s ease;
-        }
-        
-        .dark-theme .date-text {
-            color: #adb5bd;
-        }
-        
-        .event {
-            padding: 8px 10px;
-            margin: 6px 0;
-            font-size: 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border-left: 4px solid;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            overflow: hidden;
-        }
-        
-        .event:hover {
-            transform: translateX(3px);
-            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-        }
-        
-        .dark-theme .event:hover {
-            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
-        }
-        
-        .event-time {
-            font-weight: 600;
-            font-size: 11px;
-            min-width: 30px;
-            flex-shrink: 0;
-        }
-        
-        .event-title {
-            font-weight: 500;
-            flex: 1;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            font-size: 12px;
-        }
-        
-        /* 修改暗色主題下活動文字顏色為黑色 */
-        .dark-theme .event .event-time,
-        .dark-theme .event .event-title {
-            color: #212529 !important;
-        }
-        
-        .empty-cell {
-            background: #f8f9fa;
-            color: #adb5bd;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-style: italic;
-            min-height: 120px;
-            transition: all 0.3s ease;
-            min-width: 100px;
-        }
-        
-        .dark-theme .empty-cell {
-            background: #2c2c2c;
-            color: #777;
-        }
-        
-        .no-events-message {
-            text-align: center;
-            padding: 40px 20px;
-            color: #6c757d;
-            font-size: 1.1rem;
-            display: none;
-            transition: color 0.3s ease;
-        }
-        
-        .dark-theme .no-events-message {
-            color: #adb5bd;
-        }
-        
-        .status-bar {
-            margin-top: 20px;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: all 0.3s ease;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        
-        .status-indicator {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        
-        .indicator-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            flex-shrink: 0;
-        }
-        
-        .instructions {
-            margin-top: 30px;
-            padding: 20px;
-            background: #fff3cd;
-            border-radius: 10px;
-            border-left: 4px solid #ffc107;
-            transition: all 0.3s ease;
-        }
-        
-        .dark-theme .instructions {
-            background: #332d1a;
-            border-left: 4px solid #ffc107;
-        }
-        
-        .instructions h3 {
-            color: #856404;
-            margin-bottom: 10px;
-            transition: color 0.3s ease;
-        }
-        
-        .dark-theme .instructions h3 {
-            color: #ffd54f;
-        }
-        
-        .instructions ul {
-            margin-left: 20px;
-            color: #856404;
-            transition: color 0.3s ease;
-        }
-        
-        .dark-theme .instructions ul {
-            color: #ffd54f;
-        }
-        
-        .instructions li {
-            margin-bottom: 5px;
-            font-size: 14px;
-        }
-        
-        .custom-tooltip {
-            position: fixed;
-            background-color: #333;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            z-index: 1000;
-            max-width: 250px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            white-space: nowrap;
-            text-align: center;
-        }
-        
-        .dark-theme .custom-tooltip {
-            background-color: #000;
-        }
-        
-        .custom-tooltip::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: #333 transparent transparent transparent;
-        }
-        
-        .dark-theme .custom-tooltip::after {
-            border-color: #000 transparent transparent transparent;
-        }
-        
-        .event-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-            padding: 20px;
-        }
-        
-        .event-modal.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .modal-content {
-            background-color: white;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 500px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-            transition: all 0.3s ease;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        
-        .dark-theme .modal-content {
-            background-color: #2c2c2c;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-        }
-        
-        .modal-header {
-            background-color: #6c757d;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            transition: all 0.3s ease;
-            position: sticky;
-            top: 0;
-            z-index: 1;
-        }
-        
-        .dark-theme .modal-header {
-            background-color: #3a3a3a;
-        }
-        
-        .modal-header h3 {
-            margin: 0;
-            font-size: 1.4rem;
-            word-break: break-word;
-        }
-        
-        .modal-body {
-            padding: 24px;
-        }
-        
-        .event-detail {
-            margin-bottom: 16px;
-            display: flex;
-            align-items: flex-start;
-        }
-        
-        .event-detail-icon {
-            font-size: 20px;
-            margin-right: 12px;
-            min-width: 30px;
-            flex-shrink: 0;
-        }
-        
-        .event-detail-text {
-            flex: 1;
-            font-size: 15px;
-            line-height: 1.6;
-            transition: color 0.3s ease;
-            word-break: break-word;
-        }
-        
-        .dark-theme .event-detail-text {
-            color: #e9ecef;
-        }
-        
-        .modal-footer {
-            padding: 16px 24px;
-            background-color: #f8f9fa;
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-            position: sticky;
-            bottom: 0;
-        }
-        
-        .dark-theme .modal-footer {
-            background-color: #3a3a3a;
-        }
-        
-        .modal-btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 14px;
-            color: white;
-            min-width: 100px;
-        }
-        
-        .modal-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        
-        .dark-theme .modal-btn:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
-        
-        .modal-btn.secondary {
-            background-color: #6c757d;
-            color: white;
-        }
-        
-        /* 暗色主題下模態框按鈕顏色改為與亮色主題相同 */
-        .dark-theme .modal-btn {
-            background-color: #4dabf7;
-            color: white;
-        }
-        
-        .dark-theme .modal-btn.secondary {
-            background-color: #6c757d;
-            color: white;
-        }
-        
-        .dark-theme .modal-btn:hover {
-            background-color: #339af0;
-        }
-        
-        .dark-theme .modal-btn.secondary:hover {
-            background-color: #5a6268;
-        }
-        
-        .modal-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none !important;
-            box-shadow: none !important;
-        }
-        
-        .error-message {
-            background: #fff5f5;
-            border: 1px solid #feb2b2;
-            border-radius: 8px;
-            padding: 15px 20px;
-            margin-bottom: 20px;
-            color: #c53030;
-            display: none;
-            transition: all 0.3s ease;
-            word-break: break-word;
-        }
-        
-        .dark-theme .error-message {
-            background: #2a1a1a;
-            border: 1px solid #822727;
-            color: #fc8181;
-        }
-        
-        .error-message.active {
-            display: block;
-        }
+        .title-container { display: flex; align-items: baseline; gap: 10px; }
+        h1 { font-size: 1.8rem; margin: 0; }
+        .by-text { font-size: 1rem; opacity: 0.9; }
         
-        /* 新增手機端樣式優化 */
         .header-controls {
             display: flex;
             gap: 10px;
-            justify-content: center;
-            width: 100%;
             margin-top: 15px;
             flex-wrap: wrap;
+            justify-content: center;
         }
-        
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            
-            header {
-                flex-direction: column;
-                padding: 15px;
-                gap: 15px;
-            }
-            
-            .header-content {
-                flex-direction: column;
-                gap: 15px;
-                width: 100%;
-            }
-            
-            .header-logo {
-                width: 60px;
-                height: 60px;
-            }
-            
-            h1 {
-                font-size: 1.6rem;
-            }
-            
-            .theme-toggle, .refresh-btn {
-                width: auto;
-                padding: 8px 15px;
-                font-size: 13px;
-            }
-            
-            .filters {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .filter-btn {
-                width: 100%;
-                text-align: center;
-                padding: 8px 15px;
-            }
-            
-            .calendar-container {
-                padding: 15px;
-                margin-left: -10px;
-                margin-right: -10px;
-                width: calc(100% + 20px);
-                border-radius: 0;
-            }
-            
-            .day-cell {
-                min-height: 100px;
-                padding: 8px;
-            }
-            
-            .event {
-                font-size: 11px;
-                padding: 5px 8px;
-                margin: 4px 0;
-            }
-            
-            .event-time {
-                font-size: 10px;
-                min-width: 28px;
-            }
-            
-            .event-title {
-                font-size: 11px;
-            }
-            
-            .status-bar {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-                padding: 15px;
-            }
-            
-            .status-indicator {
-                justify-content: center;
-                font-size: 12px;
-            }
-            
-            .modal-content {
-                width: 95%;
-                margin: 10px;
-            }
-            
-            .modal-footer {
-                flex-direction: column;
-            }
-            
-            .modal-btn {
-                width: 100%;
-            }
-            
-            .instructions {
-                padding: 15px;
-            }
-            
-            .instructions ul {
-                margin-left: 15px;
-            }
-            
-            .instructions li {
-                font-size: 13px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 1.4rem;
-            }
-            
-            .day-number {
-                font-size: 14px;
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 2px;
-            }
-            
-            .date-text {
-                font-size: 11px;
-            }
-            
-            .calendar-grid {
-                min-width: 100%;
-            }
-            
-            .weekday-cell, .day-cell, .empty-cell {
-                min-width: 80px;
-            }
-            
-            .event-time {
-                font-size: 9px;
-                min-width: 25px;
-            }
-            
-            .event-title {
-                font-size: 10px;
-            }
-        }
-        
-        /* 新增手機端橫向滾動提示 */
-        .mobile-scroll-hint {
-            display: none;
-            text-align: center;
-            margin-top: 10px;
-            padding: 10px;
-            background: #e7f5ff;
+        .btn-ctrl {
+            padding: 8px 16px;
             border-radius: 8px;
-            font-size: 14px;
-            color: #1864ab;
-            font-weight: 500;
+            border: 1px solid rgba(255,255,255,0.4);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.2s;
         }
-        
-        .dark-theme .mobile-scroll-hint {
-            background: #1a365d;
-            color: #90cdf4;
+        .btn-ctrl:hover { background: rgba(255,255,255,0.2); }
+        .btn-ctrl.active { background: rgba(255,255,255,0.4); border-color: white; }
+
+        .filters-container {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
+        .dark-theme .filters-container { background: #2c2c2c; }
+        .search-input {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            margin-bottom: 12px;
+            outline: none;
+        }
+        .dark-theme .search-input { background: #1e1e1e; border-color: #444; color: white; }
+        .filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+        .filter-btn {
+            padding: 6px 14px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            background: white;
+            transition: all 0.2s;
+        }
+
+        .calendar-wrapper {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            width: 100%;
+        }
+        .dark-theme .calendar-wrapper { background: #2c2c2c; }
         
+        .view-grid .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            width: 100%;
+            min-width: 800px;
+        }
+        .weekday-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            background: #495057;
+            color: white;
+            min-width: 800px;
+        }
+        .weekday-cell { padding: 12px; text-align: center; font-size: 14px; font-weight: 600; }
+
+        .day-cell {
+            min-height: 130px;
+            border-right: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .dark-theme .day-cell { border-color: #444; }
+        .day-cell:nth-child(7n) { border-right: none; }
+        .day-cell.today { background: #fff9db; }
+        .dark-theme .day-cell.today { background: #2d2a1a; }
+        
+        .day-number {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .date-label { color: #868e96; font-size: 11px; }
+
+        .view-list .weekday-header { display: none; }
+        .view-list .calendar-grid { display: block; min-width: 0; }
+        .view-list .day-cell {
+            display: none;
+            min-height: auto;
+            border-right: none;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .view-list .day-cell.has-events { display: flex; }
+        .view-list .day-number { font-size: 16px; color: #1a73e8; margin-bottom: 10px; }
+
+        .event {
+            font-size: 12px;
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-left: 4px solid transparent;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+            width: 100%;
+        }
+        .event:hover { transform: translateX(3px); filter: brightness(0.9); }
+        .event-time { font-weight: bold; margin-right: 6px; }
+
+        .event.passed {
+            opacity: 0.6;
+            filter: grayscale(0.3);
+        }
+
+        .event.no-event {
+            background-color: #f1f3f5;
+            color: #adb5bd;
+            border-left-color: #dee2e6;
+            cursor: default;
+        }
+        .event.no-event:hover { transform: translateX(3px); background-color: #e9ecef; }
+        .dark-theme .event.no-event { background-color: #252525; color: #666; border-left-color: #444; }
+
+        .custom-tooltip {
+            position: fixed;
+            background: rgba(51, 51, 51, 0.95);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            z-index: 9999;
+            pointer-events: none;
+            display: none;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-box {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            overflow: hidden;
+        }
+        .dark-theme .modal-box { background: #2c2c2c; color: white; }
+        .modal-head { padding: 15px; background: #6c757d; color: white; text-align: center; }
+        .modal-body { padding: 20px; font-size: 14px; }
+        .modal-foot { padding: 15px; background: #f8f9fa; display: flex; justify-content: flex-end; gap: 10px; }
+        .dark-theme .modal-foot { background: #333; }
+        .m-btn { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .m-btn-p { background: #4dabf7; color: white; }
+        .m-btn-s { background: #adb5bd; color: white; }
+
         @media (max-width: 768px) {
-            .mobile-scroll-hint {
-                display: block;
-            }
+            body { padding: 10px; }
+            .calendar-wrapper { overflow-x: auto; }
         }
     </style>
 </head>
-<body>
+<body class="view-grid">
     <div class="container">
         <header>
             <div class="header-content">
                 <div class="header-logo">
-                    <img src="https://i.meee.com.tw/ctqdoRm.png" alt="血染鐘樓 Logo" loading="lazy">
+                    <img src="https://linmgla.github.io/BOTC/logo.png" alt="Logo" 
+                         onerror="this.src='https://raw.githubusercontent.com/linmgla/BOTC/main/logo.png'; this.onerror=function(){this.src='https://via.placeholder.com/60?text=BOTC'}">
                 </div>
                 <div class="title-container">
                     <h1>血染鐘樓活動行事曆</h1>
-                    <div class="by-text">by 曉風</div>
+                    <span class="by-text">by 曉風</span>
                 </div>
             </div>
             <div class="header-controls">
-                <button class="theme-toggle" id="themeToggle">🌙 暗色主題</button>
-                <button class="refresh-btn" id="refreshBtn">🔄 重新整理</button>
+                <button class="btn-ctrl active" id="gridBtn">🖥️ 網格模式</button>
+                <button class="btn-ctrl" id="listBtn">📱 清單模式</button>
+                <button class="btn-ctrl" id="themeBtn">🌙 暗色主題</button>
+                <button class="btn-ctrl" id="refreshBtn">🔄 重新整理</button>
             </div>
         </header>
-        
-        <div class="error-message" id="errorMessage"></div>
-        
-        <div class="update-info" id="updateInfo">
-            正在載入數據...
-        </div>
-        
-        <div class="mobile-scroll-hint" id="mobileScrollHint">
-            ← 左右滑動查看完整行事曆 →
-        </div>
-        
+
         <div class="filters-container">
-            <div class="filters" id="filters">
-                <div class="filter-label">地點篩選：</div>
-            </div>
+            <input type="text" id="searchInput" class="search-input" placeholder="搜尋劇本、說書人或地點...">
+            <div class="filters" id="filters"></div>
         </div>
-        
-        <div class="calendar-container">
-            <div class="calendar-grid" id="calendarGrid">
-                <div class="weekday-header">
-                    <div class="weekday-cell">日</div>
-                    <div class="weekday-cell">一</div>
-                    <div class="weekday-cell">二</div>
-                    <div class="weekday-cell">三</div>
-                    <div class="weekday-cell">四</div>
-                    <div class="weekday-cell">五</div>
-                    <div class="weekday-cell">六</div>
-                </div>
+
+        <div class="calendar-wrapper">
+            <div class="weekday-header">
+                <div class="weekday-cell">週日</div><div class="weekday-cell">週一</div><div class="weekday-cell">週二</div>
+                <div class="weekday-cell">週三</div><div class="weekday-cell">週四</div><div class="weekday-cell">週五</div>
+                <div class="weekday-cell">週六</div>
             </div>
-            
-            <div class="no-events-message" id="noEvents">
-                目前選擇的地點沒有活動安排
-            </div>
-            
-            <div class="status-bar" id="statusBar">
-                <div>顯示所有地點的活動</div>
-                <div class="status-indicator">
-                    <div class="indicator-dot" style="background: #4dabf7"></div>
-                    <span>101鐘樓</span>
-                    <div class="indicator-dot" style="background: #da77f2; margin-left: 10px"></div>
-                    <span>歪常研究所</span>
-                    <div class="indicator-dot" style="background: #3a8c4a; margin-left: 10px"></div>
-                    <span>小怪寶家長會</span>
-                </div>
-            </div>
+            <div class="calendar-grid" id="calendarGrid"></div>
         </div>
-        
-        <div class="event-modal" id="eventModal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 id="modalTitle">活動詳細資訊</h3>
-                </div>
-                <div class="modal-body">
-                    <div class="event-detail">
-                        <div class="event-detail-icon">📅</div>
-                        <div class="event-detail-text" id="modalDate">日期：</div>
-                    </div>
-                    <div class="event-detail">
-                        <div class="event-detail-icon">⏰</div>
-                        <div class="event-detail-text" id="modalTime">時間：</div>
-                    </div>
-                    <div class="event-detail">
-                        <div class="event-detail-icon">📍</div>
-                        <div class="event-detail-text" id="modalLocation">地點：</div>
-                    </div>
-                    <div class="event-detail">
-                        <div class="event-detail-icon">🎭</div>
-                        <div class="event-detail-text" id="modalScript">劇本：</div>
-                    </div>
-                    <div class="event-detail">
-                        <div class="event-detail-icon">📖</div>
-                        <div class="event-detail-text" id="modalStoryteller">說書人：</div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="modal-btn" id="modalLinkBtn">前往報名</button>
-                    <button class="modal-btn secondary" id="modalCloseBtn">關閉</button>
-                </div>
-            </div>
-        </div>
-        
-        <div class="loading-overlay" id="loadingOverlay">
-            <div class="loading-content">
-                <div class="loading-spinner"></div>
-                <div>正在從 Google Sheets 載入數據...</div>
-            </div>
-        </div>
-        
-        <div class="instructions">
-            <h3>📝 使用說明</h3>
-            <ul>
-                <li>點擊上方地點按鈕可切換顯示/隱藏該地點活動</li>
-                <li>按鈕顏色變淡表示該地點活動已隱藏</li>
-                <li>滑鼠懸停在活動上可查看簡要資訊</li>
-                <li>點擊活動可查看詳細資訊並前往連結</li>
-                <li>活動時間均為24小時制</li>
-                <li>已過期的活動按鈕顯示為「前往查看」</li>
-                <li>點擊「重新整理」按鈕可從 Google Sheets 獲取最新數據</li>
-                <li>數據會自動緩存 5 分鐘，減少不必要的網絡請求</li>
-                <li>點擊「切換暗色主題」可切換亮色/暗色主題</li>
-                <li><strong>手機用戶：可左右滑動查看完整行事曆</strong></li>
-            </ul>
+
+        <div id="status" style="margin-top:15px; font-size:12px; color:#888; display:flex; justify-content:space-between;">
+            <span id="countText">載入中...</span>
+            <span id="timeText"></span>
         </div>
     </div>
 
+    <div class="modal-overlay" id="modal">
+        <div class="modal-box">
+            <div class="modal-head"><h3 id="mTitle"></h3></div>
+            <div class="modal-body" id="mBody"></div>
+            <div class="modal-foot">
+                <button class="m-btn m-btn-p" id="mLink">前往報名</button>
+                <button class="m-btn m-btn-s" onclick="closeModal()">關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="tooltip" class="custom-tooltip"></div>
+
     <script>
-        // Google Sheets CSV URL
         const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT8GSdmGL5ggYr0ADz2fwltf9mBgv-77ggRneKQOBnebWG9HGOwsqpbhn5wpYgrezLHUNwIxi1ACm5r/pub?output=csv";
+        let events = [];
+        let hiddenLocs = new Set();
+        let query = "";
         
-        // 緩存配置
-        const CACHE_KEY = "botc_calendar_data";
-        const CACHE_TIMESTAMP_KEY = "botc_calendar_timestamp";
-        const CACHE_DURATION = 5 * 60 * 1000; // 5 分鐘
-        
-        // 全局變量
-        let eventData = [];
-        
-        // 地點顏色配置
-        const locationConfig = {
-            "101鐘樓": {
-                color: "#4dabf7",
-                bgColor: "#e7f5ff",
-                borderColor: "#4dabf7",
-                hiddenColor: "#f0f8ff",
-                hiddenBorder: "#a5d8ff",
-                darkBgColor: "rgba(77, 171, 247, 0.2)",
-                darkHiddenBgColor: "rgba(77, 171, 247, 0.05)"
-            },
-            "歪常研究所": {
-                color: "#da77f2",
-                bgColor: "#f8f0fc",
-                borderColor: "#da77f2",
-                hiddenColor: "#fdf2ff",
-                hiddenBorder: "#e599f7",
-                darkBgColor: "rgba(218, 119, 242, 0.2)",
-                darkHiddenBgColor: "rgba(218, 119, 242, 0.05)"
-            },
-            "小怪寶家長會": {
-                color: "#3a8c4a",
-                bgColor: "#e6f7e9",
-                borderColor: "#3a8c4a",
-                hiddenColor: "#f0f9f2",
-                hiddenBorder: "#a3d9b1",
-                darkBgColor: "rgba(58, 140, 74, 0.2)",
-                darkHiddenBgColor: "rgba(58, 140, 74, 0.05)"
-            }
+        const locConfig = {
+            "101鐘樓": { color: "#4dabf7", bg: "#e7f5ff", darkBg: "#1a365d" },
+            "歪常研究所": { color: "#da77f2", bg: "#f8f0fc", darkBg: "#3a1a4a" },
+            "小怪寶家長會": { color: "#3a8c4a", bg: "#e6f7e9", darkBg: "#1a3a1a" }
         };
 
-        // 隱藏的地點（默認都顯示）
-        let hiddenLocations = new Set();
-        
-        // 主題切換功能
-        function toggleTheme() {
-            const body = document.body;
-            const themeToggle = document.getElementById('themeToggle');
-            const isDarkTheme = body.classList.contains('dark-theme');
-            
-            if (isDarkTheme) {
-                body.classList.remove('dark-theme');
-                themeToggle.textContent = '🌙 暗色主題';
-                localStorage.setItem('theme', 'light');
-            } else {
-                body.classList.add('dark-theme');
-                themeToggle.textContent = '☀️ 亮色主題';
-                localStorage.setItem('theme', 'dark');
-            }
-            
-            generateFilterButtons();
-            generateCalendar();
-            updateStatusBar();
-        }
-        
-        // 載入保存的主題
-        function loadTheme() {
-            const savedTheme = localStorage.getItem('theme');
-            const body = document.body;
-            const themeToggle = document.getElementById('themeToggle');
-            
-            if (savedTheme === 'dark') {
-                body.classList.add('dark-theme');
-                themeToggle.textContent = '☀️ 亮色主題';
-            } else {
-                body.classList.remove('dark-theme');
-                themeToggle.textContent = '🌙 暗色主題';
-            }
-        }
-        
-        // CSV 解析函數
-        function parseCSV(csvText) {
-            const lines = csvText.trim().split('\n');
-            if (lines.length < 2) return [];
-            
-            const headers = lines[0].split(',');
-            const data = [];
-            
-            for (let i = 1; i < lines.length; i++) {
-                const line = lines[i].trim();
-                if (!line) continue;
-                
-                const values = [];
-                let currentValue = '';
-                let insideQuotes = false;
-                
-                for (let j = 0; j < line.length; j++) {
-                    const char = line[j];
-                    
-                    if (char === '"') {
-                        insideQuotes = !insideQuotes;
-                    } else if (char === ',' && !insideQuotes) {
-                        values.push(currentValue.trim());
-                        currentValue = '';
-                    } else {
-                        currentValue += char;
-                    }
-                }
-                values.push(currentValue.trim());
-                
-                const row = {};
-                headers.forEach((header, index) => {
-                    row[header.trim()] = values[index] || '';
-                });
-                
-                data.push(row);
-            }
-            
-            return data;
-        }
-        
-        // 轉換 CSV 數據為應用格式（含數據驗證）
-        function convertCSVData(csvData) {
-            const currentYear = new Date().getFullYear();
-            const validData = [];
-            
-            csvData.forEach(row => {
-                try {
-                    if (!row['日期'] || !row['日期'].includes('/')) {
-                        console.warn('跳過無效日期格式:', row['日期']);
-                        return;
-                    }
-                    
-                    const dateParts = row['日期'].split('/');
-                    const month = dateParts[0].padStart(2, '0');
-                    const day = dateParts[1].padStart(2, '0');
-                    
-                    const dateStr = `${currentYear}-${month}-${day}`;
-                    const dateObj = new Date(dateStr);
-                    if (isNaN(dateObj.getTime())) {
-                        console.warn('跳過無效日期:', dateStr);
-                        return;
-                    }
-                    
-                    let timeStr = row['時間']?.trim() || '';
-                    if (timeStr && !timeStr.includes(':')) {
-                        timeStr = '';
-                    } else if (timeStr && timeStr.split(':').length === 2) {
-                        timeStr = timeStr + ':00';
-                    }
-                    
-                    validData.push({
-                        date: dateStr,
-                        time: timeStr,
-                        location: row['地點']?.trim() || '未指定',
-                        script: row['劇本名稱']?.trim() || '未命名劇本',
-                        storyteller: row['說書人']?.trim() || '待確認',
-                        link: row['報名連結']?.trim() || '#'
-                    });
-                } catch (error) {
-                    console.error('解析資料錯誤:', error, row);
-                }
-            });
-            
-            return validData;
-        }
-        
-        // 從緩存載入數據
-        function loadFromCache() {
+        async function load(force = false) {
             try {
-                const cachedData = localStorage.getItem(CACHE_KEY);
-                const cachedTimestamp = localStorage.getItem(CACHE_TIMESTAMP_KEY);
+                const res = await fetch(CSV_URL);
+                const text = await res.text();
+                const lines = text.replace(/\r/g, '').split('\n').filter(l => l.trim());
+                const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
                 
-                if (cachedData && cachedTimestamp) {
-                    const timestamp = parseInt(cachedTimestamp);
-                    const now = Date.now();
-                    
-                    if (now - timestamp < CACHE_DURATION) {
-                        eventData = JSON.parse(cachedData);
-                        updateLastUpdateTime(new Date(timestamp));
-                        return true;
+                events = [];
+                for (let i = 1; i < lines.length; i++) {
+                    const vals = [];
+                    let cur = '', q = false;
+                    let line = lines[i];
+                    for (let j = 0; j < line.length; j++) {
+                        let c = line[j];
+                        if (c === '"') {
+                            if (q && line[j+1] === '"') { cur += '"'; j++; }
+                            else q = !q;
+                        } else if (c === ',' && !q) {
+                            vals.push(cur.trim().replace(/^"|"$/g, ''));
+                            cur = '';
+                        } else cur += c;
                     }
-                }
-            } catch (error) {
-                console.error('載入緩存失敗:', error);
-            }
-            return false;
-        }
-        
-        // 保存到緩存
-        function saveToCache(data) {
-            try {
-                localStorage.setItem(CACHE_KEY, JSON.stringify(data));
-                localStorage.setItem(CACHE_TIMESTAMP_KEY, Date.now().toString());
-            } catch (error) {
-                console.error('保存緩存失敗:', error);
-            }
-        }
-        
-        // 從 Google Sheets 載入數據
-        async function loadDataFromGoogleSheets(forceRefresh = false) {
-            if (!forceRefresh && loadFromCache()) {
-                console.log('從緩存載入數據');
-                return true;
-            }
-            
-            showLoading(true);
-            hideError();
-            
-            try {
-                const response = await fetch(CSV_URL);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP 錯誤! 狀態碼: ${response.status}`);
-                }
-                
-                const csvText = await response.text();
-                const csvData = parseCSV(csvText);
-                eventData = convertCSVData(csvData);
-                
-                if (eventData.length === 0) {
-                    throw new Error('沒有找到有效的活動數據');
-                }
-                
-                saveToCache(eventData);
-                updateLastUpdateTime(new Date());
-                
-                console.log('成功載入數據:', eventData.length, '個活動');
-                return true;
-                
-            } catch (error) {
-                console.error('載入數據失敗:', error);
-                showError(`無法載入數據: ${error.message}。請稍後再試。`);
-                
-                if (loadFromCache()) {
-                    console.log('使用緩存數據作為後備');
-                    return true;
-                }
-                
-                return false;
-            } finally {
-                showLoading(false);
-            }
-        }
-        
-        // 顯示/隱藏載入中
-        function showLoading(show) {
-            const overlay = document.getElementById('loadingOverlay');
-            const refreshBtn = document.getElementById('refreshBtn');
-            const themeToggle = document.getElementById('themeToggle');
-            
-            if (show) {
-                overlay.classList.add('active');
-                refreshBtn.disabled = true;
-                themeToggle.disabled = true;
-            } else {
-                overlay.classList.remove('active');
-                refreshBtn.disabled = false;
-                themeToggle.disabled = false;
-            }
-        }
-        
-        // 顯示錯誤訊息
-        function showError(message) {
-            const errorDiv = document.getElementById('errorMessage');
-            errorDiv.textContent = message;
-            errorDiv.classList.add('active');
-        }
-        
-        // 隱藏錯誤訊息
-        function hideError() {
-            const errorDiv = document.getElementById('errorMessage');
-            errorDiv.classList.remove('active');
-        }
-        
-        // 更新最後更新時間
-        function updateLastUpdateTime(date) {
-            const updateInfo = document.getElementById('updateInfo');
-            const timeStr = date.toLocaleString('zh-TW', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-            updateInfo.textContent = `最後更新時間: ${timeStr}`;
-        }
-        
-        // 重新整理數據
-        async function refreshData() {
-            const success = await loadDataFromGoogleSheets(true);
-            if (success) {
-                generateFilterButtons();
-                generateCalendar();
-                updateStatusBar();
-            }
-        }
-        
-        // 格式化日期為 YYYY-MM-DD
-        function formatDateToYYYYMMDD(date) {
-            const year = date.getFullYear();
-            const month = (date.getMonth() + 1).toString().padStart(2, '0');
-            const day = date.getDate().toString().padStart(2, '0');
-            return `${year}-${month}-${day}`;
-        }
-        
-        // 檢查日期是否已過期
-        function isDatePassed(eventDate, eventTime) {
-            const now = new Date();
-            
-            if (!eventTime || eventTime.trim() === "") {
-                const eventDateOnly = new Date(eventDate);
-                eventDateOnly.setHours(0, 0, 0, 0);
-                
-                const nowDateOnly = new Date();
-                nowDateOnly.setHours(0, 0, 0, 0);
-                
-                return nowDateOnly > eventDateOnly;
-            }
-            
-            const eventDateTime = new Date(`${eventDate}T${eventTime}`);
-            return now > eventDateTime;
-        }
-        
-        // 初始化函數
-        async function init() {
-            loadTheme();
-            
-            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
-            document.getElementById('refreshBtn').addEventListener('click', refreshData);
-            
-            const success = await loadDataFromGoogleSheets();
-            
-            if (success) {
-                generateFilterButtons();
-                generateCalendar();
-                setupModalEvents();
-                updateStatusBar();
-            } else {
-                showError('無法載入活動數據。請稍後重試。');
-            }
-        }
-        
-        // 設置提示框事件
-        function setupModalEvents() {
-            const modal = document.getElementById('eventModal');
-            const closeBtn = document.getElementById('modalCloseBtn');
-            const linkBtn = document.getElementById('modalLinkBtn');
-            
-            closeBtn.addEventListener('click', () => {
-                modal.classList.remove('active');
-            });
-            
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.classList.remove('active');
-                }
-            });
-            
-            linkBtn.addEventListener('click', () => {
-                const link = linkBtn.dataset.link;
-                if (link && link !== '#') {
-                    window.open(link, '_blank');
-                }
-                modal.classList.remove('active');
-            });
-            
-            // 添加 ESC 鍵關閉功能
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && modal.classList.contains('active')) {
-                    modal.classList.remove('active');
-                }
-            });
-        }
-        
-        // 顯示滑鼠懸停提示框
-        function showTooltip(event, eventInfo) {
-            removeTooltip();
-            
-            const tooltip = document.createElement('div');
-            tooltip.className = 'custom-tooltip';
-            tooltip.textContent = `${eventInfo.location} - ${eventInfo.script}`;
-            
-            const rect = event.target.getBoundingClientRect();
-            let top = rect.top - 40;
-            let left = rect.left + rect.width / 2;
-            
-            if (top < 10) {
-                top = rect.bottom + 10;
-            }
-            
-            tooltip.style.top = `${top}px`;
-            tooltip.style.left = `${left}px`;
-            tooltip.style.transform = 'translateX(-50%)';
-            tooltip.style.opacity = '1';
-            
-            document.body.appendChild(tooltip);
-            event.target._tooltip = tooltip;
-        }
-        
-        // 移除滑鼠懸停提示框
-        function removeTooltip() {
-            const tooltip = document.querySelector('.custom-tooltip');
-            if (tooltip) {
-                tooltip.remove();
-            }
-        }
-        
-        // 顯示點擊活動提示框
-        function showEventModal(eventInfo, dayInfo) {
-            const modal = document.getElementById('eventModal');
-            const modalTitle = document.getElementById('modalTitle');
-            const modalDate = document.getElementById('modalDate');
-            const modalTime = document.getElementById('modalTime');
-            const modalLocation = document.getElementById('modalLocation');
-            const modalScript = document.getElementById('modalScript');
-            const modalStoryteller = document.getElementById('modalStoryteller');
-            const linkBtn = document.getElementById('modalLinkBtn');
-            
-            modalTitle.textContent = eventInfo.script;
-            modalDate.textContent = `日期：${dayInfo.month}/${dayInfo.date}（${dayInfo.weekday}）`;
-            
-            if (eventInfo.time && eventInfo.time.trim() !== "") {
-                modalTime.textContent = `時間：${eventInfo.time.substring(0, 5)}`;
-            } else {
-                modalTime.textContent = `時間：未指定`;
-            }
-            
-            modalLocation.textContent = `地點：${eventInfo.location}`;
-            modalScript.textContent = `劇本：${eventInfo.script}`;
-            modalStoryteller.textContent = `說書人：${eventInfo.storyteller || '待確認'}`;
-            
-            const isPassed = isDatePassed(eventInfo.date, eventInfo.time);
-            
-            linkBtn.dataset.link = eventInfo.link || '#';
-            if (eventInfo.link && eventInfo.link !== '#') {
-                if (isPassed) {
-                    linkBtn.textContent = '前往查看';
-                    linkBtn.style.backgroundColor = '#6c757d';
-                } else {
-                    linkBtn.textContent = '前往報名';
-                    linkBtn.style.backgroundColor = '#4dabf7';
-                }
-                linkBtn.disabled = false;
-                linkBtn.style.opacity = '1';
-                linkBtn.style.cursor = 'pointer';
-            } else {
-                linkBtn.textContent = '無連結';
-                linkBtn.disabled = true;
-                linkBtn.style.opacity = '0.6';
-                linkBtn.style.cursor = 'not-allowed';
-                linkBtn.style.backgroundColor = '#6c757d';
-            }
-            
-            modal.classList.add('active');
-        }
-        
-        // 生成篩選按鈕 - 已修正暗色主題顯示問題，讓暗色主題使用亮色主題的顏色
-        function generateFilterButtons() {
-            const filtersContainer = document.getElementById('filters');
-            
-            const label = filtersContainer.querySelector('.filter-label');
-            filtersContainer.innerHTML = '';
-            if (label) filtersContainer.appendChild(label);
-            
-            Object.keys(locationConfig).forEach(location => {
-                const isHidden = hiddenLocations.has(location);
-                const config = locationConfig[location];
-                
-                const button = document.createElement('button');
-                button.className = 'filter-btn';
-                button.textContent = location;
-                
-                // 無論是亮色還是暗色主題，都使用亮色主題的顏色配置
-                if (isHidden) {
-                    // 隱藏狀態的按鈕
-                    button.style.backgroundColor = config.hiddenColor;
-                    button.style.color = '#adb5bd';
-                    button.style.border = `2px solid ${config.hiddenBorder}`;
-                } else {
-                    // 顯示狀態的按鈕
-                    button.style.backgroundColor = config.bgColor;
-                    button.style.color = config.color;
-                    button.style.border = `2px solid ${config.borderColor}`;
-                }
-                
-                button.addEventListener('click', () => toggleLocation(location));
-                
-                filtersContainer.appendChild(button);
-            });
-        }
-        
-        // 切換地點顯示/隱藏
-        function toggleLocation(location) {
-            if (hiddenLocations.has(location)) {
-                hiddenLocations.delete(location);
-            } else {
-                hiddenLocations.add(location);
-            }
-            
-            generateFilterButtons();
-            generateCalendar();
-            updateStatusBar();
-        }
-        
-        // 更新狀態欄
-        function updateStatusBar() {
-            const statusBar = document.getElementById('statusBar');
-            const statusText = statusBar.querySelector('div:first-child');
-            const hiddenCount = hiddenLocations.size;
-            const isDarkTheme = document.body.classList.contains('dark-theme');
-            
-            if (hiddenCount === 0) {
-                statusText.textContent = "顯示所有地點的活動";
-                if (isDarkTheme) {
-                    statusBar.style.backgroundColor = "#1a365d";
-                    statusBar.style.color = "#90cdf4";
-                } else {
-                    statusBar.style.backgroundColor = "#e7f5ff";
-                    statusBar.style.color = "#1864ab";
-                }
-            } else if (hiddenCount === 3) {
-                statusText.textContent = "所有地點活動皆已隱藏";
-                if (isDarkTheme) {
-                    statusBar.style.backgroundColor = "#2c2c2c";
-                    statusBar.style.color = "#adb5bd";
-                } else {
-                    statusBar.style.backgroundColor = "#f8f9fa";
-                    statusBar.style.color = "#6c757d";
-                }
-            } else {
-                const hiddenList = Array.from(hiddenLocations).join('、');
-                statusText.textContent = `已隱藏：${hiddenList}`;
-                if (isDarkTheme) {
-                    statusBar.style.backgroundColor = "#332d1a";
-                    statusBar.style.color = "#ffd54f";
-                } else {
-                    statusBar.style.backgroundColor = "#fff3cd";
-                    statusBar.style.color = "#856404";
-                }
-            }
-        }
-        
-        // 生成日曆 - 已修改為完全隱藏被篩選掉的活動
-        function generateCalendar() {
-            const calendarGrid = document.getElementById('calendarGrid');
-            const noEventsMessage = document.getElementById('noEvents');
-            
-            calendarGrid.innerHTML = '';
-            
-            const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
-            weekdays.forEach(day => {
-                const weekdayCell = document.createElement('div');
-                weekdayCell.className = 'weekday-cell';
-                weekdayCell.textContent = day;
-                calendarGrid.appendChild(weekdayCell);
-            });
-            
-            const january2026 = createCalendarData(1, 2026);
-            let hasVisibleEvents = false;
-            
-            const today = new Date();
-            const todayStr = formatDateToYYYYMMDD(today);
-            
-            january2026.forEach(day => {
-                const dayCell = document.createElement('div');
-                
-                if (day.isEmpty) {
-                    dayCell.className = 'empty-cell';
-                    calendarGrid.appendChild(dayCell);
-                    return;
-                }
-                
-                dayCell.className = 'day-cell';
-                
-                if (day.fullDate === todayStr) {
-                    dayCell.classList.add('today');
-                }
-                
-                const dayNumber = document.createElement('div');
-                dayNumber.className = 'day-number';
-                
-                const dayText = document.createElement('span');
-                dayText.textContent = `${day.month}/${day.date}`;
-                
-                const weekdayText = document.createElement('span');
-                weekdayText.className = 'date-text';
-                weekdayText.textContent = `(${day.weekday})`;
-                
-                dayNumber.appendChild(dayText);
-                dayNumber.appendChild(weekdayText);
-                dayCell.appendChild(dayNumber);
-                
-                const dayEvents = getEventsForDate(day.fullDate);
-                // 篩選出未隱藏的事件
-                const visibleDayEvents = dayEvents.filter(event => !hiddenLocations.has(event.location));
-                let hasVisibleDayEvents = false;
-                
-                // 只顯示未隱藏的事件
-                if (visibleDayEvents.length > 0) {
-                    visibleDayEvents.forEach(event => {
-                        hasVisibleEvents = true;
-                        hasVisibleDayEvents = true;
-                        
-                        const eventDiv = document.createElement('div');
-                        eventDiv.className = 'event';
-                        
-                        const config = locationConfig[event.location];
-                        
-                        // 無論是亮色還是暗色主題，都使用亮色主題的顏色配置
-                        eventDiv.style.backgroundColor = config.bgColor;
-                        eventDiv.style.borderLeftColor = config.borderColor;
-                        
-                        const isPassed = isDatePassed(event.date, event.time);
-                        if (isPassed) {
-                            eventDiv.style.opacity = '0.7';
-                        }
-                        
-                        const timeSpan = document.createElement('span');
-                        timeSpan.className = 'event-time';
-                        timeSpan.textContent = event.time && event.time.trim() !== "" ? 
-                            event.time.substring(0, 5) : "";
-                        
-                        const titleSpan = document.createElement('span');
-                        titleSpan.className = 'event-title';
-                        titleSpan.textContent = event.script;
-                        
-                        eventDiv.appendChild(timeSpan);
-                        eventDiv.appendChild(titleSpan);
-                        
-                        // 添加懸停和點擊事件
-                        eventDiv.addEventListener('mouseenter', (e) => {
-                            showTooltip(e, event);
-                        });
-                        
-                        eventDiv.addEventListener('mouseleave', removeTooltip);
-                        
-                        eventDiv.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            showEventModal(event, day);
-                        });
-                        
-                        dayCell.appendChild(eventDiv);
+                    vals.push(cur.trim().replace(/^"|"$/g, ''));
+
+                    const row = {};
+                    headers.forEach((h, idx) => row[h] = vals[idx] || '');
+                    
+                    const dateStr = row['日期'] || '';
+                    const [m, d] = dateStr.split('/');
+                    if (!m || !d) continue;
+                    
+                    events.push({
+                        date: `2026-${m.padStart(2,'0')}-${d.padStart(2,'0')}`,
+                        time: row['時間'] || '',
+                        loc: row['地點'] || '未指定',
+                        script: row['劇本名稱'] || '未命名劇本',
+                        st: row['說書人'] || '待確認',
+                        link: row['報名連結'] || '#'
                     });
                 }
-                
-                // 如果該天沒有任何可見事件，顯示"暫無活動"
-                if (!hasVisibleDayEvents) {
-                    const noEvent = document.createElement('div');
-                    noEvent.className = 'event';
-                    noEvent.textContent = "暫無活動";
-                    if (document.body.classList.contains('dark-theme')) {
-                        noEvent.style.backgroundColor = "#2c2c2c";
-                        noEvent.style.color = "#777";
-                        noEvent.style.borderLeftColor = "#555";
-                    } else {
-                        noEvent.style.backgroundColor = "#f8f9fa";
-                        noEvent.style.color = "#adb5bd";
-                        noEvent.style.borderLeftColor = "#dee2e6";
-                    }
-                    noEvent.style.cursor = "default";
-                    dayCell.appendChild(noEvent);
-                }
-                
-                calendarGrid.appendChild(dayCell);
+                render();
+            } catch (e) { 
+                console.error(e);
+                document.getElementById('countText').textContent = "載入失敗"; 
+            }
+        }
+
+        function render() {
+            const f = document.getElementById('filters');
+            f.innerHTML = '<span style="font-weight:600; font-size:13px;">地點篩選：</span>';
+            Object.keys(locConfig).forEach(l => {
+                const b = document.createElement('button');
+                b.className = 'filter-btn';
+                b.textContent = l;
+                const isH = hiddenLocs.has(l);
+                const c = locConfig[l];
+                const isD = document.body.classList.contains('dark-theme');
+                b.style.backgroundColor = isH ? (isD ? '#333' : '#eee') : (isD ? c.darkBg : c.bg);
+                b.style.color = isH ? '#888' : c.color;
+                b.style.border = `2px solid ${isH ? '#555' : c.color}`;
+                b.onclick = () => { if(hiddenLocs.has(l)) hiddenLocs.delete(l); else hiddenLocs.add(l); render(); };
+                f.appendChild(b);
             });
-            
-            // 更新無活動訊息
-            if (!hasVisibleEvents && hiddenLocations.size > 0) {
-                noEventsMessage.style.display = 'block';
-                noEventsMessage.textContent = hiddenLocations.size === 3 ? 
-                    '所有地點活動皆已隱藏' : '目前選擇的地點沒有活動安排';
-            } else {
-                noEventsMessage.style.display = 'none';
+
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+            const y = 2026, m = 1;
+            const first = new Date(y, m-1, 1).getDay();
+            const days = new Date(y, m, 0).getDate();
+            const today = new Date().toISOString().split('T')[0];
+
+            for (let i=0; i<first; i++) {
+                const e = document.createElement('div');
+                e.className = 'day-cell';
+                grid.appendChild(e);
             }
-        }
-        
-        // 獲取指定日期的活動
-        function getEventsForDate(date) {
-            return eventData.filter(event => event.date === date);
-        }
-        
-        // 創建月曆數據
-        function createCalendarData(month, year) {
-            const daysInMonth = new Date(year, month, 0).getDate();
-            const firstDayOfMonth = new Date(year, month - 1, 1).getDay();
-            
-            const calendarData = [];
-            const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
-            
-            for (let i = 0; i < firstDayOfMonth; i++) {
-                calendarData.push({
-                    date: '',
-                    month: month,
-                    weekday: '',
-                    fullDate: '',
-                    isEmpty: true
-                });
+
+            let total = 0;
+            for (let d=1; d<=days; d++) {
+                const ds = `${y}-${m.toString().padStart(2,'0')}-${d.toString().padStart(2,'0')}`;
+                const cell = document.createElement('div');
+                cell.className = 'day-cell';
+                if (ds === today) cell.classList.add('today');
+
+                const num = document.createElement('div');
+                num.className = 'day-number';
+                num.innerHTML = `<span>${m}/${d}</span><span class="date-label">${['日','一','二','三','四','五','六'][new Date(y, m-1, d).getDay()]}</span>`;
+                cell.appendChild(num);
+
+                const filtered = events.filter(e => e.date === ds && !hiddenLocs.has(e.loc) && 
+                    (!query || e.script.includes(query) || e.st.includes(query) || e.loc.includes(query)));
+
+                if (filtered.length > 0) {
+                    cell.classList.add('has-events');
+                    total += filtered.length;
+                    filtered.forEach(e => {
+                        const div = document.createElement('div');
+                        div.className = 'event';
+                        const c = locConfig[e.loc] || { color: "#999", bg: "#f0f0f0", darkBg: "#333" };
+                        const isD = document.body.classList.contains('dark-theme');
+                        div.style.backgroundColor = isD ? c.darkBg : c.bg;
+                        div.style.color = isD ? '#fff' : c.color;
+                        div.style.borderLeftColor = c.color;
+                        div.innerHTML = `<span class="event-time">${e.time.substring(0,5)}</span>${e.script}`;
+                        
+                        if (new Date() > new Date(`${e.date}T${e.time || '00:00'}`)) div.classList.add('passed');
+                        
+                        div.onmousemove = (ev) => {
+                            const t = document.getElementById('tooltip');
+                            t.textContent = `${e.loc} - ${e.script}`;
+                            t.style.display = 'block';
+                            t.style.left = (ev.clientX + 15) + 'px';
+                            t.style.top = (ev.clientY + 15) + 'px';
+                        };
+                        div.onmouseleave = () => document.getElementById('tooltip').style.display = 'none';
+                        div.onclick = () => openModal(e);
+                        cell.appendChild(div);
+                    });
+                } else {
+                    const none = document.createElement('div');
+                    none.className = 'event no-event';
+                    none.textContent = '暫無活動';
+                    cell.appendChild(none);
+                }
+                grid.appendChild(cell);
             }
-            
-            for (let day = 1; day <= daysInMonth; day++) {
-                const date = new Date(year, month - 1, day);
-                calendarData.push({
-                    date: day,
-                    month: month,
-                    weekday: weekdays[date.getDay()],
-                    fullDate: `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`,
-                    isEmpty: false
-                });
-            }
-            
-            return calendarData;
+            document.getElementById('countText').textContent = `共顯示 ${total} 個活動`;
         }
-        
-        // 頁面加載時初始化
-        document.addEventListener('DOMContentLoaded', init);
+
+        function openModal(e) {
+            document.getElementById('mTitle').textContent = e.script;
+            document.getElementById('mBody').innerHTML = `
+                <p><b>日期：</b>${e.date}</p><p><b>時間：</b>${e.time}</p>
+                <p><b>地點：</b>${e.loc}</p><p><b>說書人：</b>${e.st}</p>
+            `;
+            const btn = document.getElementById('mLink');
+            const passed = new Date() > new Date(`${e.date}T${e.time || '00:00'}`);
+            btn.textContent = passed ? '前往查看' : '前往報名';
+            btn.style.backgroundColor = passed ? '#6c757d' : '#4dabf7';
+            btn.onclick = () => window.open(e.link, '_blank');
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function closeModal() { document.getElementById('modal').classList.remove('active'); }
+
+        document.getElementById('gridBtn').onclick = () => {
+            document.body.className = document.body.classList.contains('dark-theme') ? 'view-grid dark-theme' : 'view-grid';
+            document.getElementById('gridBtn').classList.add('active');
+            document.getElementById('listBtn').classList.remove('active');
+        };
+        document.getElementById('listBtn').onclick = () => {
+            document.body.className = document.body.classList.contains('dark-theme') ? 'view-list dark-theme' : 'view-list';
+            document.getElementById('listBtn').classList.add('active');
+            document.getElementById('gridBtn').classList.remove('active');
+        };
+        document.getElementById('themeBtn').onclick = () => {
+            const isD = document.body.classList.toggle('dark-theme');
+            document.getElementById('themeBtn').textContent = isD ? '☀️ 亮色主題' : '🌙 暗色主題';
+            localStorage.setItem('theme', isD ? 'dark' : 'light');
+            render();
+        };
+        document.getElementById('refreshBtn').onclick = () => load(true);
+        document.getElementById('searchInput').oninput = (e) => { query = e.target.value.trim(); render(); };
+
+        if (window.innerWidth <= 768) document.getElementById('listBtn').click();
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-theme');
+            document.getElementById('themeBtn').textContent = '☀️ 亮色主題';
+        }
+        load();
     </script>
 </body>
 </html>
