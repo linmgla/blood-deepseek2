@@ -214,18 +214,18 @@
         }
         
         /* 網格模式樣式 - 按照(10)的結構 */
-        .view-grid .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            width: 100%;
-            min-width: 800px;
-        }
-        
-        .view-grid .weekday-header {
+        body.view-grid .weekday-header {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             background: #495057;
             color: white;
+            min-width: 800px;
+        }
+        
+        body.view-grid .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            width: 100%;
             min-width: 800px;
         }
         
@@ -236,7 +236,7 @@
             font-weight: 600; 
         }
         
-        .view-grid .day-cell {
+        body.view-grid .day-cell {
             min-height: 130px;
             border-right: 1px solid #eee;
             border-bottom: 1px solid #eee;
@@ -247,20 +247,20 @@
             background: white;
         }
         
-        .dark-theme .view-grid .day-cell {
+        body.view-grid.dark-theme .day-cell {
             background: #2c2c2c;
             border-color: #444;
         }
         
-        .view-grid .day-cell:nth-child(7n) { 
+        body.view-grid .day-cell:nth-child(7n) { 
             border-right: none; 
         }
         
-        .view-grid .day-cell.today { 
+        body.view-grid .day-cell.today { 
             background: #fff9db; 
         }
         
-        .dark-theme .view-grid .day-cell.today { 
+        body.view-grid.dark-theme .day-cell.today { 
             background: #2d2a1a; 
         }
         
@@ -277,7 +277,7 @@
             font-size: 11px; 
         }
         
-        .dark-theme .date-label {
+        body.dark-theme .date-label {
             color: #aaa;
         }
         
@@ -322,27 +322,27 @@
             background-color: #e9ecef; 
         }
         
-        .dark-theme .event.no-event { 
+        body.dark-theme .event.no-event { 
             background-color: #252525; 
             color: #666; 
             border-left-color: #444; 
         }
         
-        .dark-theme .event.no-event:hover { 
+        body.dark-theme .event.no-event:hover { 
             background-color: #252525; 
         }
         
         /* 清單模式樣式 */
-        .view-list .weekday-header { 
+        body.view-list .weekday-header { 
             display: none; 
         }
         
-        .view-list .calendar-grid { 
+        body.view-list .calendar-grid { 
             display: block; 
             min-width: 0; 
         }
         
-        .view-list .day-cell {
+        body.view-list .day-cell {
             display: none;
             min-height: auto;
             border-right: none;
@@ -351,31 +351,31 @@
             background: white;
         }
         
-        .dark-theme .view-list .day-cell {
+        body.view-list.dark-theme .day-cell {
             background: #2c2c2c;
             border-color: #444;
         }
         
-        .view-list .day-cell.has-events { 
+        body.view-list .day-cell.has-events { 
             display: flex; 
             flex-direction: column;
         }
         
-        .view-list .day-cell.today { 
+        body.view-list .day-cell.today { 
             background: #fff9db; 
         }
         
-        .dark-theme .view-list .day-cell.today { 
+        body.view-list.dark-theme .day-cell.today { 
             background: #2d2a1a; 
         }
         
-        .view-list .day-number { 
+        body.view-list .day-number { 
             font-size: 16px; 
             color: #1a73e8; 
             margin-bottom: 10px; 
         }
         
-        .dark-theme .view-list .day-number {
+        body.view-list.dark-theme .day-number {
             color: #4dabf7;
         }
         
@@ -392,7 +392,7 @@
             color: #1864ab;
         }
         
-        .dark-theme .status-bar {
+        body.dark-theme .status-bar {
             background-color: #2c2c2c;
             color: #e9ecef;
         }
@@ -468,7 +468,7 @@
             overflow: hidden;
         }
         
-        .dark-theme .modal-box {
+        body.dark-theme .modal-box {
             background-color: #2c2c2c;
             color: white;
         }
@@ -502,7 +502,7 @@
             gap: 10px;
         }
         
-        .dark-theme .modal-foot {
+        body.dark-theme .modal-foot {
             background: #333;
         }
         
@@ -537,25 +537,25 @@
                 padding: 10px; 
             }
             
-            .view-grid .calendar-wrapper { 
+            body.view-grid .calendar-wrapper { 
                 overflow-x: auto; 
             }
             
-            .view-grid .calendar-grid {
+            body.view-grid .calendar-grid {
                 min-width: 700px;
             }
             
-            .view-grid .weekday-header {
+            body.view-grid .weekday-header {
                 min-width: 700px;
             }
         }
         
         @media (max-width: 1200px) {
-            .view-grid .calendar-grid {
+            body.view-grid .calendar-grid {
                 min-width: 700px;
             }
             
-            .view-grid .weekday-header {
+            body.view-grid .weekday-header {
                 min-width: 700px;
             }
         }
@@ -584,13 +584,20 @@
         
         <div class="filters-container">
             <input type="text" id="searchInput" class="search-input" placeholder="搜尋劇本、說書人或地點...">
-            <div class="filters" id="filters"></div>
+            <div class="filters" id="filters">
+                <div class="filter-label">地點篩選：</div>
+                <!-- 篩選按鈕會由JavaScript生成 -->
+            </div>
         </div>
         
         <div class="calendar-wrapper">
             <div class="weekday-header">
-                <div class="weekday-cell">日</div><div class="weekday-cell">一</div><div class="weekday-cell">二</div>
-                <div class="weekday-cell">三</div><div class="weekday-cell">四</div><div class="weekday-cell">五</div>
+                <div class="weekday-cell">日</div>
+                <div class="weekday-cell">一</div>
+                <div class="weekday-cell">二</div>
+                <div class="weekday-cell">三</div>
+                <div class="weekday-cell">四</div>
+                <div class="weekday-cell">五</div>
                 <div class="weekday-cell">六</div>
             </div>
             <div class="calendar-grid" id="calendarGrid"></div>
@@ -598,9 +605,7 @@
         
         <div class="status-bar" id="statusBar">
             <div id="statusText">顯示所有地點的活動</div>
-            <div class="status-indicator" id="statusIndicator">
-                <!-- 狀態指示器會由JavaScript生成 -->
-            </div>
+            <div class="status-indicator" id="statusIndicator"></div>
         </div>
         
         <div id="status" style="margin-top:15px; font-size:12px; color:#888; display:flex; justify-content:space-between;">
