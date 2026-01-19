@@ -254,8 +254,9 @@
             border-bottom: 1px solid #f1f3f5;
         }
         
+        /* 核心修正：確保暗色模式下所有格子背景正確 */
         .dark-theme .view-grid .day-cell {
-            background: #2d2d2d;
+            background: #2d2d2d !important;
             border-bottom-color: #444;
         }
         
@@ -266,7 +267,7 @@
         }
         
         .dark-theme .view-grid .day-cell.today {
-            background-color: #3a3520;
+            background-color: #3a3520 !important;
             border-color: #ffc107;
         }
         
@@ -849,7 +850,6 @@
                 for (let i = 0; i < firstDayOfMonth; i++) {
                     const emptyCell = document.createElement('div');
                     emptyCell.className = 'day-cell';
-                    emptyCell.style.backgroundColor = isD ? '#252525' : '#f8f9fa';
                     grid.appendChild(emptyCell);
                 }
             }
