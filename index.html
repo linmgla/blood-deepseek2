@@ -180,9 +180,9 @@
         .event:hover { transform: translateX(3px); filter: brightness(0.9); }
         .event-time { font-weight: bold; margin-right: 6px; }
 
+        /* 過期活動樣式修正 - 保持文字顏色不變，僅調整背景透明度 */
         .event.passed {
-            opacity: 0.6;
-            filter: grayscale(0.3);
+            opacity: 0.6; /* 調整整體透明度來區分，但文字顏色仍會基於背景色呈現 */
         }
 
         .event.no-event {
@@ -243,7 +243,7 @@
         <header>
             <div class="header-content">
                 <div class="header-logo">
-                    <img src="https://i.meee.com.tw/Wx2xW7E.png" alt="Logo" 
+                    <img src="https://linmgla.github.io/BOTC/logo.png" alt="Logo" 
                          onerror="this.src='https://raw.githubusercontent.com/linmgla/BOTC/main/logo.png'; this.onerror=function(){this.src='https://via.placeholder.com/60?text=BOTC'}">
                 </div>
                 <div class="title-container">
