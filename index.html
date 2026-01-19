@@ -39,6 +39,7 @@
             color: white;
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: background-color 0.3s ease;
         }
 
         body.dark-theme header {
@@ -410,6 +411,23 @@
         body.dark-theme .last-update {
             color: #666;
         }
+
+        .demo-notice {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            color: #856404;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        body.dark-theme .demo-notice {
+            background: #332b00;
+            border-color: #665500;
+            color: #ffecb5;
+        }
     </style>
 </head>
 <body>
@@ -430,6 +448,8 @@
             </div>
         </header>
 
+        <div id="demoNotice"></div>
+
         <div class="filter-section">
             <div class="search-box">
                 <input type="text" id="searchInput" placeholder="搜尋劇本、說書人或地點...">
@@ -437,7 +457,6 @@
             <div class="location-filters" id="locationFilters">
                 <span>地點篩選：</span>
                 <div class="location-tag active" data-location="all">顯示所有地點的活動</div>
-                <!-- 地點標籤會由 JS 動態生成 -->
             </div>
         </div>
 
@@ -460,6 +479,13 @@
             }
         };
 
+        // 範例資料（當 API 失敗時顯示）
+        const MOCK_DATA = [
+            { date: '2026-01-20', time: '19:00', title: '血染鐘樓：暗流湧動', storyteller: '曉風', location: '101鐘樓', players: '8-12人', status: '報名中' },
+            { date: '2026-01-21', time: '14:00', title: '血染鐘樓：黯月孤兒', storyteller: '小明', location: '歪常研究所', players: '10-15人', status: '已滿' },
+            { date: '2026-01-22', time: '19:30', title: '血染鐘樓：教派與紫羅蘭', storyteller: '曉風', location: '小怪資家長會', players: '9-13人', status: '報名中' }
+        ];
+
         let allEvents = [];
         let currentView = 'grid';
         let currentFilter = 'all';
@@ -467,7 +493,6 @@
 
         // 初始化
         document.addEventListener('DOMContentLoaded', () => {
-            fetchData();
             setupEventListeners();
             
             // 檢查本地儲存的主題設定
@@ -476,6 +501,8 @@
                 document.body.classList.add('dark-theme');
                 document.getElementById('themeBtn').innerHTML = '☀️ 亮色主題';
             }
+            
+            fetchData();
         });
 
         function setupEventListeners() {
@@ -502,11 +529,18 @@
         async function fetchData() {
             const container = document.getElementById('calendarContainer');
             container.innerHTML = '<div class="loading">載入中...</div>';
+            document.getElementById('demoNotice').innerHTML = '';
             
             try {
+                // 檢查是否為佔位符網址
+                if (CONFIG.API_URL.includes('AKfycbz_9_9_9')) {
+                    throw new Error('未設定有效的 API 網址');
+                }
+
                 const response = await fetch(CONFIG.API_URL);
-                const data = await response.json();
+                if (!response.ok) throw new Error('網路請求失敗');
                 
+                const data = await response.json();
                 if (data.status === 'success') {
                     allEvents = data.data;
                     renderEvents();
@@ -516,12 +550,17 @@
                     throw new Error('資料格式錯誤');
                 }
             } catch (error) {
-                console.error('Fetch error:', error);
-                container.innerHTML = `
-                    <div class="error-msg">
-                        <p>抱歉，無法載入活動資料。</p>
-                        <p style="font-size: 0.8rem; margin-top: 10px;">錯誤原因：${error.message}</p>
-                        <button class="btn" style="margin: 15px auto; background: #842029;" onclick="fetchData()">重試</button>
+                console.warn('Fetch error, using mock data:', error.message);
+                // API 失敗時使用範例資料
+                allEvents = MOCK_DATA;
+                renderEvents();
+                renderLocationFilters();
+                updateTimestamp();
+                
+                // 顯示提示訊息
+                document.getElementById('demoNotice').innerHTML = `
+                    <div class="demo-notice">
+                        ⚠️ 目前顯示的是範例資料。請在程式碼中設定正確的 <code>API_URL</code> 以連接您的 Google Sheets。
                     </div>
                 `;
             }
@@ -531,7 +570,6 @@
             const filterContainer = document.getElementById('locationFilters');
             const locations = [...new Set(allEvents.map(event => event.location))];
             
-            // 保留 "全部" 標籤，重新生成其他標籤
             filterContainer.innerHTML = `
                 <span>地點篩選：</span>
                 <div class="location-tag ${currentFilter === 'all' ? 'active' : ''}" data-location="all">顯示所有地點的活動</div>
