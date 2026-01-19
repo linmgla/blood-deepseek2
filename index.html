@@ -17,13 +17,6 @@
             color: #333;
             background-color: #f8f9fa;
             padding: 20px;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        
-        /* 暗色主題 - 按照(10)的設定 */
-        body.dark-theme {
-            color: #e9ecef;
-            background-color: #121212;
         }
         
         .container {
@@ -44,10 +37,6 @@
             justify-content: center;
             position: relative;
             flex-direction: column;
-        }
-        
-        body.dark-theme header {
-            background: #2c2c2c;
         }
         
         .header-content {
@@ -138,10 +127,6 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.08);
         }
         
-        body.dark-theme .filters-container {
-            background: #2c2c2c;
-        }
-        
         .search-input {
             width: 100%;
             padding: 12px 15px;
@@ -153,21 +138,9 @@
             transition: all 0.3s ease;
         }
         
-        body.dark-theme .search-input {
-            background: #1e1e1e;
-            border-color: #444;
-            color: white;
-        }
-        
         .search-input:focus {
             border-color: #4dabf7;
             box-shadow: 0 0 0 3px rgba(77, 171, 247, 0.2);
-        }
-        
-        /* 搜尋框 placeholder 顏色設定 */
-        body.dark-theme .search-input::placeholder {
-            color: #aaa;
-            opacity: 1;
         }
         
         .filters {
@@ -180,10 +153,6 @@
         .filter-label {
             font-weight: 600;
             color: #555;
-        }
-        
-        body.dark-theme .filter-label {
-            color: #e9ecef;
         }
         
         .filter-btn {
@@ -208,11 +177,6 @@
             transform: translateY(0);
         }
         
-        /* 暗色主題下篩選按鈕懸停效果 */
-        body.dark-theme .filter-btn:hover {
-            filter: brightness(110%);
-        }
-        
         /* 日曆容器 */
         .calendar-container {
             background: white;
@@ -222,11 +186,7 @@
             overflow: hidden;
         }
         
-        body.dark-theme .calendar-container {
-            background: #2c2c2c;
-        }
-        
-        /* 網格模式 - 使用(11)的網格樣式，但套用(10)的暗色主題 */
+        /* 網格模式 */
         .view-grid .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
@@ -235,11 +195,6 @@
             border: 1px solid #e9ecef;
             border-radius: 8px;
             overflow: hidden;
-        }
-        
-        body.dark-theme .view-grid .calendar-grid {
-            background: #444;
-            border-color: #444;
         }
         
         .view-grid .weekday-header {
@@ -262,23 +217,10 @@
             border-bottom: 1px solid #f1f3f5;
         }
         
-        /* 暗色主題日曆單元格 - 修正為黑色背景 */
-        body.dark-theme .view-grid .day-cell {
-            background: #2c2c2c;
-            border-bottom-color: #444;
-        }
-        
         .view-grid .day-cell.today {
             background-color: #fff9e6;
             border: 2px solid #ffc107;
             box-shadow: inset 0 0 8px rgba(255, 193, 7, 0.2);
-        }
-        
-        /* 暗色主題今天日期 - 按照(10)設定 */
-        body.dark-theme .view-grid .day-cell.today {
-            background-color: #2d2a1a;
-            border-color: #444;
-            box-shadow: none;
         }
         
         .day-number {
@@ -291,17 +233,9 @@
             justify-content: space-between;
         }
         
-        body.dark-theme .day-number {
-            color: #e9ecef;
-        }
-        
         .date-text {
             font-size: 14px;
             color: #6c757d;
-        }
-        
-        body.dark-theme .date-text {
-            color: #aaa;
         }
         
         /* 事件樣式 */
@@ -325,11 +259,6 @@
             box-shadow: 0 3px 8px rgba(0,0,0,0.1);
         }
         
-        /* 暗色主題下事件懸停效果（不包括無事件） */
-        body.dark-theme .event:not(.no-event):hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-        
         .event-time {
             font-weight: 600;
             font-size: 12px;
@@ -343,7 +272,7 @@
             text-overflow: ellipsis;
         }
         
-        /* 無活動樣式 - 暗色主題按照(10)設定 */
+        /* 無活動樣式 */
         .event.no-event {
             background-color: #f1f3f5;
             color: #adb5bd;
@@ -357,17 +286,7 @@
             background-color: #e9ecef;
         }
         
-        body.dark-theme .event.no-event {
-            background-color: #252525;
-            color: #666;
-            border-left-color: #444;
-        }
-        
-        body.dark-theme .event.no-event:hover {
-            background-color: #252525;
-        }
-        
-        /* 過期活動樣式 - 按照(10)設定 */
+        /* 過期活動樣式 */
         .event.passed {
             opacity: 0.6;
         }
@@ -393,13 +312,6 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
         
-        /* 暗色主題清單模式單元格 - 按照(10)設定 */
-        body.dark-theme .view-list .day-cell {
-            background: #2c2c2c;
-            border-bottom-color: #444;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-        
         .view-list .day-cell.has-events {
             display: block;
         }
@@ -409,23 +321,13 @@
             border: 2px solid #ffc107;
         }
         
-        /* 暗色主題清單模式今天日期 - 按照(10)設定 */
-        body.dark-theme .view-list .day-cell.today {
-            background-color: #2d2a1a;
-            border-color: #444;
-        }
-        
         .view-list .day-number {
             font-size: 16px;
             color: #1a73e8;
             margin-bottom: 10px;
         }
         
-        body.dark-theme .view-list .day-number {
-            color: #4dabf7;
-        }
-        
-        /* 狀態欄 - 按照(10)的風格 */
+        /* 狀態欄 */
         .status-bar {
             margin-top: 20px;
             padding: 12px 20px;
@@ -437,11 +339,6 @@
             justify-content: space-between;
             background-color: #e7f5ff;
             color: #1864ab;
-        }
-        
-        body.dark-theme .status-bar {
-            background-color: #2c2c2c;
-            color: #e9ecef;
         }
         
         .status-indicator {
@@ -484,7 +381,7 @@
             border-color: #333 transparent transparent transparent;
         }
         
-        /* 活動詳細資訊模態框 - 暗色主題按照(10)設定 */
+        /* 活動詳細資訊模態框 */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -515,11 +412,6 @@
             overflow: hidden;
         }
         
-        body.dark-theme .modal-content {
-            background-color: #2c2c2c;
-            color: white;
-        }
-        
         .modal-header {
             background-color: #6c757d;
             color: white;
@@ -548,10 +440,6 @@
             color: #6c757d;
             text-align: center;
             flex-shrink: 0;
-        }
-        
-        body.dark-theme .event-detail-icon {
-            color: #aaa;
         }
         
         .event-detail-text {
@@ -682,11 +570,6 @@
             font-style: italic;
             background-color: #f8f9fa;
         }
-        
-        body.dark-theme .day-cell.empty-cell {
-            background-color: #2c2c2c;
-            color: #666;
-        }
     </style>
 </head>
 <body class="view-grid">
@@ -705,7 +588,6 @@
             <div class="header-controls">
                 <button class="btn-ctrl active" id="gridBtn">🖥️ 網格模式</button>
                 <button class="btn-ctrl" id="listBtn">📱 清單模式</button>
-                <button class="btn-ctrl" id="themeBtn">🌙 暗色主題</button>
                 <button class="btn-ctrl" id="refreshBtn">🔄 重新整理</button>
             </div>
         </header>
@@ -789,19 +671,16 @@
             "101鐘樓": { 
                 color: "#4dabf7", 
                 bg: "#e7f5ff", 
-                darkBg: "#1a365d",
                 borderColor: "#4dabf7"
             },
             "歪常研究所": { 
                 color: "#da77f2", 
                 bg: "#f8f0fc", 
-                darkBg: "#3a1a4a",
                 borderColor: "#da77f2"
             },
             "小怪寶家長會": { 
                 color: "#3a8c4a", 
                 bg: "#e6f7e9", 
-                darkBg: "#1a3a1a",
                 borderColor: "#3a8c4a"
             }
         };
@@ -863,15 +742,14 @@
                 b.textContent = l;
                 const isH = hiddenLocs.has(l);
                 const c = locConfig[l];
-                const isD = document.body.classList.contains('dark-theme');
                 
                 if (isH) {
-                    b.style.backgroundColor = isD ? '#333' : '#eee';
-                    b.style.color = isD ? '#888' : '#adb5bd';
-                    b.style.border = `2px solid ${isD ? '#555' : '#dee2e6'}`;
+                    b.style.backgroundColor = '#eee';
+                    b.style.color = '#adb5bd';
+                    b.style.border = `2px solid #dee2e6`;
                 } else {
-                    b.style.backgroundColor = isD ? c.darkBg : c.bg;
-                    b.style.color = isD ? '#fff' : c.color;
+                    b.style.backgroundColor = c.bg;
+                    b.style.color = c.color;
                     b.style.border = `2px solid ${c.borderColor}`;
                 }
                 
@@ -968,10 +846,9 @@
                     filtered.forEach(e => {
                         const div = document.createElement('div');
                         div.className = 'event';
-                        const c = locConfig[e.loc] || { color: "#999", bg: "#f0f0f0", darkBg: "#333", borderColor: "#999" };
-                        const isD = document.body.classList.contains('dark-theme');
-                        div.style.backgroundColor = isD ? c.darkBg : c.bg;
-                        div.style.color = isD ? '#fff' : '#333';
+                        const c = locConfig[e.loc] || { color: "#999", bg: "#f0f0f0", borderColor: "#999" };
+                        div.style.backgroundColor = c.bg;
+                        div.style.color = '#333';
                         div.style.borderLeftColor = c.borderColor;
                         div.innerHTML = `<span class="event-time">${e.time.substring(0,5)}</span><span class="event-title">${e.script}</span>`;
                         
@@ -1113,23 +990,16 @@
 
         // 事件監聽器
         document.getElementById('gridBtn').onclick = () => {
-            document.body.className = document.body.classList.contains('dark-theme') ? 'view-grid dark-theme' : 'view-grid';
+            document.body.className = 'view-grid';
             document.getElementById('gridBtn').classList.add('active');
             document.getElementById('listBtn').classList.remove('active');
             render();
         };
         
         document.getElementById('listBtn').onclick = () => {
-            document.body.className = document.body.classList.contains('dark-theme') ? 'view-list dark-theme' : 'view-list';
+            document.body.className = 'view-list';
             document.getElementById('listBtn').classList.add('active');
             document.getElementById('gridBtn').classList.remove('active');
-            render();
-        };
-        
-        document.getElementById('themeBtn').onclick = () => {
-            const isD = document.body.classList.toggle('dark-theme');
-            document.getElementById('themeBtn').textContent = isD ? '☀️ 亮色主題' : '🌙 暗色主題';
-            localStorage.setItem('theme', isD ? 'dark' : 'light');
             render();
         };
         
@@ -1142,10 +1012,6 @@
 
         // 初始化
         if (window.innerWidth <= 768) document.getElementById('listBtn').click();
-        if (localStorage.getItem('theme') === 'dark') {
-            document.body.classList.add('dark-theme');
-            document.getElementById('themeBtn').textContent = '☀️ 亮色主題';
-        }
         
         // 設定時間顯示
         function updateTime() {
