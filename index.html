@@ -176,7 +176,7 @@
         }
         
         .dark-theme .filter-label {
-            color: #ccc;
+            color: #e9ecef;
         }
         
         .filter-btn {
@@ -250,7 +250,7 @@
         }
         
         .dark-theme .view-grid .day-cell {
-            background: #333;
+            background: #2c2c2c;
             border-bottom-color: #444;
         }
         
@@ -322,7 +322,7 @@
         }
         
         .event.no-event {
-            background-color: #f8f9fa;
+            background-color: #f1f3f5;
             color: #adb5bd;
             border-left-color: #dee2e6;
             cursor: default;
@@ -337,11 +337,16 @@
         .event.no-event:hover {
             transform: none;
             box-shadow: none;
+            background-color: #e9ecef;
+        }
+        
+        .dark-theme .event.no-event:hover {
+            background-color: #252525;
         }
         
         /* 過期活動樣式 */
         .event.passed {
-            opacity: 0.7;
+            opacity: 0.6;
         }
         
         /* 清單模式樣式 */
@@ -368,7 +373,7 @@
         }
         
         .dark-theme .view-list .day-cell {
-            background: #333;
+            background: #2c2c2c;
             border-bottom-color: #444;
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
@@ -378,7 +383,7 @@
         }
         
         .view-list .day-cell.today {
-            background-color: #fff9e6;
+            background-color: #fff9db;
             border: 2px solid #ffc107;
         }
         
@@ -411,8 +416,8 @@
         }
         
         .dark-theme .status-bar {
-            background-color: #1a365d;
-            color: #a5d8ff;
+            background-color: #2c2c2c;
+            color: #e9ecef;
         }
         
         .status-indicator {
@@ -488,6 +493,7 @@
         
         .dark-theme .modal-box {
             background-color: #2c2c2c;
+            color: white;
         }
         
         .modal-head {
@@ -512,19 +518,23 @@
         }
         
         .modal-foot {
-            padding: 16px 24px 24px;
-            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .dark-theme .modal-foot {
+            background: #333;
         }
         
         .m-btn {
-            padding: 12px 32px;
+            padding: 8px 16px;
             border: none;
             border-radius: 6px;
-            font-size: 16px;
-            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.2s ease;
-            margin: 0 5px;
+            font-weight: 600;
         }
         
         .m-btn-p {
@@ -537,7 +547,7 @@
         }
         
         .m-btn-s {
-            background-color: #6c757d;
+            background-color: #adb5bd;
             color: white;
         }
         
@@ -618,7 +628,7 @@
             }
             
             .m-btn {
-                padding: 10px 20px;
+                padding: 8px 16px;
                 font-size: 14px;
             }
             
@@ -963,7 +973,7 @@
                 
                 if (isH) {
                     b.style.backgroundColor = isD ? c.darkBg + '40' : '#f8f9fa';
-                    b.style.color = '#adb5bd';
+                    b.style.color = isD ? '#888' : '#adb5bd';
                     b.style.border = `2px solid ${isD ? '#555' : '#dee2e6'}`;
                     b.style.opacity = '0.7';
                 } else {
