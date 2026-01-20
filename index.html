@@ -145,13 +145,17 @@
             margin: 0;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
             color: var(--header-text);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
         
         .by-text {
-            font-size: 1.1rem;
+            font-size: 1.3rem;
             font-weight: normal;
             color: var(--header-secondary-text);
-            margin-top: 5px;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
         
@@ -343,9 +347,9 @@
             overflow: hidden;
         }
         
-        .event:hover {
+        /* 正常活動的懸停效果 */
+        .event:not(.no-event):hover {
             transform: translateX(3px);
-            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
         }
         
         .event-time {
@@ -370,8 +374,11 @@
         }
         
         .event.no-event:hover {
-            transform: none;
-            box-shadow: none;
+            transform: translateX(3px);
+            /* 保持原有的背景色和文字顏色 */
+            background-color: var(--no-event-bg);
+            color: var(--no-event-text);
+            border-left-color: var(--border-color);
         }
         
         /* 過期活動樣式 */
@@ -620,10 +627,12 @@
             
             h1 {
                 font-size: 2rem;
+                flex-direction: column;
+                gap: 5px;
             }
             
             .by-text {
-                font-size: 0.9rem;
+                font-size: 1.1rem;
             }
             
             .status-bar {
@@ -647,7 +656,7 @@
             }
             
             .by-text {
-                font-size: 0.8rem;
+                font-size: 1rem;
             }
             
             .view-grid .day-cell {
@@ -675,8 +684,10 @@
                          onerror="this.src='https://raw.githubusercontent.com/linmgla/BOTC/main/logo.png'; this.onerror=function(){this.src='https://via.placeholder.com/60?text=BOTC'}">
                 </div>
                 <div class="title-container">
-                    <h1>血染鐘樓活動行事曆</h1>
-                    <span class="by-text">by 曉風</span>
+                    <h1>
+                        <span>血染鐘樓活動行事曆</span>
+                        <span class="by-text">by 曉風</span>
+                    </h1>
                 </div>
             </div>
             <div class="header-controls">
@@ -763,6 +774,9 @@
         let query = "";
         let isDarkTheme = true; // 預設為暗色主題
         
+        // 使用者設定
+        const USER_SETTINGS_KEY = 'botc_calendar_settings';
+        
         const locConfig = {
             "101鐘樓": { 
                 darkBg: "#1e3a5f", 
@@ -784,6 +798,68 @@
             }
         };
 
+        // ============ 設定儲存與載入功能 ============
+        
+        // 儲存設定到 localStorage
+        function saveSettings() {
+            const settings = {
+                theme: isDarkTheme ? 'dark' : 'light',
+                viewMode: document.body.classList.contains('view-list') ? 'list' : 'grid',
+                hiddenLocations: Array.from(hiddenLocs)
+            };
+            
+            try {
+                localStorage.setItem(USER_SETTINGS_KEY, JSON.stringify(settings));
+            } catch (e) {
+                console.error('無法儲存設定到 localStorage:', e);
+            }
+        }
+        
+        // 從 localStorage 載入設定
+        function loadSettings() {
+            try {
+                const saved = localStorage.getItem(USER_SETTINGS_KEY);
+                if (saved) {
+                    const settings = JSON.parse(saved);
+                    
+                    // 載入主題設定
+                    if (settings.theme === 'light') {
+                        isDarkTheme = false;
+                        document.body.classList.add('light-theme');
+                        document.getElementById('themeToggle').textContent = "🌙 切換暗色主題";
+                    } else {
+                        isDarkTheme = true;
+                        document.body.classList.remove('light-theme');
+                        document.getElementById('themeToggle').textContent = "☀️ 切換亮色主題";
+                    }
+                    
+                    // 載入檢視模式設定
+                    if (settings.viewMode === 'list') {
+                        document.body.classList.remove('view-grid');
+                        document.body.classList.add('view-list');
+                        document.getElementById('listBtn').classList.add('active');
+                        document.getElementById('gridBtn').classList.remove('active');
+                    } else {
+                        document.body.classList.remove('view-list');
+                        document.body.classList.add('view-grid');
+                        document.getElementById('gridBtn').classList.add('active');
+                        document.getElementById('listBtn').classList.remove('active');
+                    }
+                    
+                    // 載入隱藏地點設定
+                    if (settings.hiddenLocations && Array.isArray(settings.hiddenLocations)) {
+                        hiddenLocs = new Set(settings.hiddenLocations);
+                    }
+                    
+                    return true;
+                }
+            } catch (e) {
+                console.error('無法從 localStorage 載入設定:', e);
+            }
+            
+            return false;
+        }
+
         // 主題切換函數 - 使用CSS變數，不需要重新渲染
         function toggleTheme() {
             isDarkTheme = !isDarkTheme;
@@ -801,6 +877,9 @@
             
             // 重新生成活動卡片以應用新主題
             updateEventCards();
+            
+            // 儲存設定
+            saveSettings();
         }
 
         // 更新篩選按鈕顏色
@@ -936,6 +1015,10 @@
                     } else {
                         hiddenLocs.add(l); 
                     } 
+                    
+                    // 儲存設定
+                    saveSettings();
+                    
                     render(); 
                 };
                 f.appendChild(b);
@@ -1179,6 +1262,10 @@
             document.body.className = isDarkTheme ? 'view-grid' : 'view-grid light-theme';
             document.getElementById('gridBtn').classList.add('active');
             document.getElementById('listBtn').classList.remove('active');
+            
+            // 儲存設定
+            saveSettings();
+            
             render();
         };
         
@@ -1186,6 +1273,10 @@
             document.body.className = isDarkTheme ? 'view-list' : 'view-list light-theme';
             document.getElementById('listBtn').classList.add('active');
             document.getElementById('gridBtn').classList.remove('active');
+            
+            // 儲存設定
+            saveSettings();
+            
             render();
         };
         
@@ -1200,20 +1291,31 @@
         document.getElementById('themeToggle').onclick = toggleTheme;
 
         // 初始化
-        if (window.innerWidth <= 768) {
-            document.getElementById('listBtn').click();
+        function init() {
+            // 首先載入使用者設定
+            loadSettings();
+            
+            // 根據裝置寬度決定預設檢視模式（只有在沒有儲存設定時才適用）
+            if (window.innerWidth <= 768 && !document.body.classList.contains('view-list') && !document.body.classList.contains('view-grid')) {
+                // 如果沒有儲存的設定，在小螢幕裝置上預設使用清單模式
+                document.getElementById('listBtn').click();
+            }
+            
+            // 設定時間顯示
+            function updateTime() {
+                const now = new Date();
+                document.getElementById('timeText').textContent = 
+                    `更新時間: ${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+            }
+            setInterval(updateTime, 60000);
+            updateTime();
+            
+            // 載入資料
+            load();
         }
         
-        // 設定時間顯示
-        function updateTime() {
-            const now = new Date();
-            document.getElementById('timeText').textContent = 
-                `更新時間: ${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
-        }
-        setInterval(updateTime, 60000);
-        updateTime();
-        
-        load();
+        // 頁面載入完成後初始化
+        init();
     </script>
 </body>
 </html>
